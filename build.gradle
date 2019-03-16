@@ -22,10 +22,10 @@ dependencies {
     compile group: 'org.glassfish.jersey.media', name: 'jersey-media-json-jackson', version: '2.28' // for MediaType.APPLICATION_JSON MessageBodyWriter not found for media type=application/json for parsing response
     // -------------------------------------- Embedded Jetty+Jersey end ------------------------------------------------
     
-    compile group: 'com.sparkjava', name: 'spark-core', version:'2.7.2'
-    compile group: 'ma.glasnost.orika', name: 'orika-core', version: '1.5.4'
-    compile group: 'commons-dbutils', name: 'commons-dbutils', version: '1.7'
-    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.7'
+    compile group: 'com.sparkjava', name: 'spark-core', version:'2.7.2' // spark
+    compile group: 'ma.glasnost.orika', name: 'orika-core', version: '1.5.4' // for mapping entity to dto
+    compile group: 'commons-dbutils', name: 'commons-dbutils', version: '1.7' // for open/close db connection etc.
+    compile group: 'org.apache.httpcomponents', name: 'httpclient', version: '4.5.7'// for testing REST by httpClient
 }
 
 sourceSets {
@@ -35,6 +35,14 @@ sourceSets {
         }
         resources {
             srcDirs= ["src/main/resources"]
+        }
+    }
+    test {
+        java {
+            srcDirs= ["src/test/java"]
+        }
+        resources {
+            srcDirs= ["src/test/resources"]
         }
     }
 }

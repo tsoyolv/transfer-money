@@ -40,15 +40,11 @@ public class PreparedStatementForUpdateCreator<T extends DbEntity> {
         }
         query.append(") VALUES (").append(questionMarks).append(")");
         PreparedStatement stmt = null;
-        try {
-            stmt = connection.prepareStatement(query.toString());
-            for (Map.Entry<Integer, Field> entry : indexFieldNameMap.entrySet()) {
-                index = entry.getKey();
-                Field field = entry.getValue();
-                setPreparedStatementParameter(entity, stmt, index, field);
-            }
-        } finally {
-            DbUtils.closeQuietly(stmt);
+        stmt = connection.prepareStatement(query.toString());
+        for (Map.Entry<Integer, Field> entry : indexFieldNameMap.entrySet()) {
+            index = entry.getKey();
+            Field field = entry.getValue();
+            setPreparedStatementParameter(entity, stmt, index, field);
         }
         return stmt;
     }

@@ -13,17 +13,22 @@ import org.apache.http.client.utils.URIBuilder;
 import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
+import org.apache.http.util.EntityUtils;
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
 
 import javax.ws.rs.core.MediaType;
+import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.Scanner;
 
 public abstract class AbstractControllerTest {
     private static AbstractEmbeddedServer embeddedServer = new JettyEmbeddedServer(AccountController.class.getPackageName(), false);
     private static PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager();
+    private static String ROOT_JSON_EXAMPLES_PATH = "jsonexamples" + File.separator;
     protected static final String HOST = embeddedServer.getServerHost() + ":" + embeddedServer.getServerPort();
     protected static HttpClient commonClient;
     protected ObjectMapper mapper = new ObjectMapper();
@@ -82,5 +87,17 @@ public abstract class AbstractControllerTest {
                 .setConnectionManagerShared(true)
                 .build();
         return httpPost(url, entity, client);
+    }
+
+    protected <T> T parseEntityFromHttpResponse(HttpResponse response, Class<T> t) throws IOException {
+        String jsonString = EntityUtils.toString(response.getEntity());
+        return mapper.readValue(jsonString, t);
+    }
+
+    protected <T> T parseJsonExampleByFileName(String fileName, Class<T> clazz) throws IOException {
+        InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(ROOT_JSON_EXAMPLES_PATH + fileName);
+        Scanner s = new Scanner(resourceAsStream).useDelimiter("\\A");
+        String json = s.hasNext() ? s.next() : "";
+        return mapper.readValue(json, clazz);
     }
 }

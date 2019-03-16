@@ -4,9 +4,9 @@ import com.tsoyolv.transfermoney.UriPath;
 import com.tsoyolv.transfermoney.rest.webmodel.WebAccount;
 import com.tsoyolv.transfermoney.rest.webmodel.WebTransaction;
 import org.apache.http.HttpResponse;
-import org.apache.http.util.EntityUtils;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URISyntaxException;
@@ -16,22 +16,39 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 
 public class AccountControllerTest extends AbstractControllerTest {
     private static final String GET_ACCOUNTS = UriPath.REST_ROOT_PATH + UriPath.ACCOUNT_ROOT_PATH;
     private static final String TRANSFER = UriPath.REST_ROOT_PATH + UriPath.ACCOUNT_ROOT_PATH + UriPath.TRANSFER_BETWEEN_ACCOUNTS_PATH;
+    private static final String JSON_ACCOUNT_EXAMPLES_PATH = "accountcontroller" + File.separator;
 
     @Test
-    public void testSimpleTransferringBetweenAccount() throws IOException, URISyntaxException, InterruptedException {
-        WebTransaction webTransaction1 = new WebTransaction(1L, 2L, new BigDecimal(12L), "RUR"); // 88 212
-        WebTransaction webTransaction2 = new WebTransaction(3L, 2L, new BigDecimal(21L), "RUR"); // 479  221|233
-        WebTransaction webTransaction3 = new WebTransaction(1L, 4L, new BigDecimal(44L), "RUR"); // 44|66  544
+    public void testCreate() throws IOException, URISyntaxException {
+        WebAccount webAccountForPost = parseJsonExampleByFileName(JSON_ACCOUNT_EXAMPLES_PATH + "createAccount.json", WebAccount.class);
+        HttpResponse response = httpPost(UriPath.REST_ROOT_PATH + UriPath.ACCOUNT_ROOT_PATH, webAccountForPost, commonClient);
+        assertNotNull(response);
+        assertEquals(200, response.getStatusLine().getStatusCode());
+        assertNotNull(response.getEntity());
+        WebAccount createdAccount = parseEntityFromHttpResponse(response, WebAccount.class);
+        assertNotNull(createdAccount);
+        assertEquals("4123567891234567", createdAccount.getAccountNumber());
+    }
+
+    @Test
+    public void testSimpleTransferringBetweenAccount() throws IOException, URISyntaxException {
+        WebTransaction webTransaction1 = parseJsonExampleByFileName(JSON_ACCOUNT_EXAMPLES_PATH + "transfer1.json", WebTransaction.class);
+        WebTransaction webTransaction2 = parseJsonExampleByFileName(JSON_ACCOUNT_EXAMPLES_PATH + "transfer2.json", WebTransaction.class);
+        WebTransaction webTransaction3 = parseJsonExampleByFileName(JSON_ACCOUNT_EXAMPLES_PATH + "transfer3.json", WebTransaction.class);
 
         HttpResponse response = transferMoneyPostRequest(webTransaction1);
         HttpResponse response1 = transferMoneyPostRequest(webTransaction2);
         HttpResponse response2 = transferMoneyPostRequest(webTransaction3);
 
+        assertNotNull(response);
+        assertNotNull(response1);
+        assertNotNull(response2);
         assertEquals(response.getStatusLine().getStatusCode(), 200);
         assertEquals(response1.getStatusLine().getStatusCode(), 200);
         assertEquals(response2.getStatusLine().getStatusCode(), 200);
@@ -133,7 +150,6 @@ public class AccountControllerTest extends AbstractControllerTest {
 
     private WebAccount[] parseWebAccountsFromResponse(HttpResponse response) throws IOException {
         int statusCode = response.getStatusLine().getStatusCode();
-        String jsonString = EntityUtils.toString(response.getEntity());
-        return mapper.readValue(jsonString, WebAccount[].class);
+        return parseEntityFromHttpResponse(response, WebAccount[].class);
     }
 }

@@ -20,7 +20,7 @@ import static com.tsoyolv.transfermoney.ApplicationProperties.DB_INSERT_TEST_DAT
 public class DBMigration {
 
     private static final Logger log = LogManager.getLogger(DBMigration.class);
-    private static String ROOT_DB_MIGRATION = "dbmigration" + File.separator;;
+    private static String ROOT_DB_MIGRATION = "dbmigration" + File.separator;
 
     /**
      * Run ddl scripts (and dml if test data needed)
