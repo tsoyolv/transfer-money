@@ -5,7 +5,6 @@ import com.tsoyolv.transfermoney.rest.webmodel.WebAccount;
 import com.tsoyolv.transfermoney.rest.webmodel.WebTransaction;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
-import org.junit.Ignore;
 import org.junit.Test;
 
 import java.io.File;
@@ -103,34 +102,30 @@ public class AccountControllerIntegrationTest extends AbstractControllerIntegrat
         assertEquals(HttpStatus.SC_OK, response3.getStatusLine().getStatusCode());
     }
 
-    // todo doesn't work normally
     @Test
-    @Ignore
-    public void testMultipleThreadsTransferring() throws IOException, URISyntaxException, InterruptedException {
+    public void testMultipleThreadsTransferringBetweenAccounts() throws IOException, URISyntaxException, InterruptedException {
         int threadsAmount = 100;
         ExecutorService executor = Executors.newFixedThreadPool(threadsAmount);
-        WebTransaction webTransaction1 = new WebTransaction(1L, 2L, new BigDecimal(1L), "RUR");
-        WebTransaction webTransaction4 = new WebTransaction(2L, 1L, new BigDecimal(1L), "RUR");
-
-        TransferMoneyTask transferMoneyTask1 = new TransferMoneyTask(webTransaction1);
-        TransferMoneyTask transferMoneyTask4 = new TransferMoneyTask(webTransaction4);
-        for (int i = 1; i < threadsAmount; i++) {
-            executor.execute(transferMoneyTask4);
-            executor.execute(transferMoneyTask1);
+        for (int i = 0; i < threadsAmount; i++) {
+            executor.execute(new TransferMoneyTask(new WebTransaction(1L, 2L, new BigDecimal(1L), "RUR")));
+            executor.execute(new TransferMoneyTask(new WebTransaction(2L, 1L, new BigDecimal(1L), "RUR")));
         }
         executor.shutdown();
         executor.awaitTermination(1, TimeUnit.MINUTES);
 
-        WebAccount[] accounts = getWebAccountsGetRequest();
-        System.out.println(Arrays.toString(accounts));
-        assertEquals(accounts[0].getBalance(), new BigDecimal(100).setScale(2));
-        assertEquals(accounts[1].getBalance(), new BigDecimal(200).setScale(2));
+        HttpResponse response = httpGet(GET_ACCOUNTS_REST_PATH, commonClient);
+
+        assertNotNull(response);
+        assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
+
+        WebAccount[] webAccounts = parseEntityFromHttpResponse(response, WebAccount[].class);
+
+        assertEquals(webAccounts[0].getBalance(), new BigDecimal(100).setScale(2));
+        assertEquals(webAccounts[1].getBalance(), new BigDecimal(200).setScale(2));
+        System.out.println(Arrays.toString(webAccounts));
     }
 
     private class TransferMoneyTask implements Runnable {
-
-        public TransferMoneyTask() {
-        }
 
         public TransferMoneyTask(WebTransaction webTransaction) {
             this.webTransaction = webTransaction;
@@ -140,45 +135,21 @@ public class AccountControllerIntegrationTest extends AbstractControllerIntegrat
 
         @Override
         public void run() {
-            HttpResponse response = null;
             try {
-                response = transferMoneyWithNewClient(webTransaction);
+                HttpResponse response = httpPost(TRANSFER_REST_PATH, webTransaction, commonClient);
                 int statusCode = response.getStatusLine().getStatusCode();
-                if (statusCode != 200) {
-                    System.out.println("_____________________---------NONONONONONON");
-                    throw new RuntimeException("not 200 " + webTransaction);
+                if (HttpStatus.SC_OK != statusCode) {
+                    System.out.println("FAIL. Thread name: " + Thread.currentThread().getName());
+                    throw new RuntimeException("NOT 200 " + webTransaction);
                 }
-                WebAccount[] account = getWebAccountsWithNewClient();
-                System.out.println("TRans " + webTransaction + "acc" + Arrays.toString(account));
-            } catch (Exception e) {
-                throw new RuntimeException("ddddddd 200", e);
+                System.out.println("OK. Thread name: " + Thread.currentThread().getName());
+            } catch (URISyntaxException e) {
+                System.out.println("URISyntaxException " + e.getMessage());
+                throw new RuntimeException("URISyntaxException ", e);
+            } catch (IOException e) {
+                System.out.println("IOException " + e.getMessage());
+                throw new RuntimeException("IOException ", e);
             }
         }
-    }
-
-    private WebAccount[] getWebAccountsGetRequest() throws IOException, URISyntaxException {
-        HttpResponse response = httpGet(GET_ACCOUNTS_REST_PATH, commonClient);
-        int statusCode = response.getStatusLine().getStatusCode();
-        //assertEquals(200, statusCode);
-        if (statusCode != 200) {
-            System.out.println("_____________________---------getWebAccountsGetRequest");
-            throw new RuntimeException("not 200");
-        }
-        return parseEntityFromHttpResponse(response, WebAccount[].class);
-    }
-
-    private WebAccount[] getWebAccountsWithNewClient() throws IOException, URISyntaxException {
-        HttpResponse response = httpGetWithNewClient(GET_ACCOUNTS_REST_PATH);
-        int statusCode = response.getStatusLine().getStatusCode();
-        //assertEquals(200, statusCode);
-        if (statusCode != 200) {
-            System.out.println("_____________________---------getWebAccountsWithNewClient");
-            throw new RuntimeException("not 200");
-        }
-        return parseEntityFromHttpResponse(response, WebAccount[].class);
-    }
-
-    private HttpResponse transferMoneyWithNewClient(WebTransaction webTransaction) throws IOException, URISyntaxException {
-        return httpPostWithNewClient(TRANSFER_REST_PATH, webTransaction);
     }
 }

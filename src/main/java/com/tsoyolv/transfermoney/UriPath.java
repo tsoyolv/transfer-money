@@ -7,4 +7,6 @@ public interface UriPath {
     String ACCOUNT_ROOT_PATH = "/account";
     String GET_ACCOUNT_BY_ID_PATH = "/{accountId}";
     String TRANSFER_BETWEEN_ACCOUNTS_PATH = "/transfer";
+
+    String TEST_THREAD_SAFE_CONTROLLER = "/threadsafe";
 }

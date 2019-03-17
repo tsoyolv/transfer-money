@@ -1,6 +1,7 @@
 package com.tsoyolv.transfermoney.dao.impl.jdbc;
 
 import com.tsoyolv.transfermoney.dao.AccountDao;
+import com.tsoyolv.transfermoney.dao.impl.jdbc.util.ResultSetToModelMapper;
 import com.tsoyolv.transfermoney.database.DatabaseConnector;
 import com.tsoyolv.transfermoney.model.Account;
 import com.tsoyolv.transfermoney.model.Transaction;
@@ -10,10 +11,15 @@ import org.apache.logging.log4j.Logger;
 
 import java.math.BigDecimal;
 import java.math.RoundingMode;
-
-import java.sql.*;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.List;
+
+import static com.tsoyolv.transfermoney.database.DatabaseConnector.rollbackTransaction;
 
 public class JdbcAccountDao extends AbstractJdbcDao<Account> implements AccountDao {
     private static final Logger log = LogManager.getLogger(ResultSetToModelMapper.class);
@@ -66,7 +72,6 @@ public class JdbcAccountDao extends AbstractJdbcDao<Account> implements AccountD
     @Override
     public boolean transferMoney(Transaction transaction) {
         Connection conn = null;
-        PreparedStatement updateStmt = null;
         try {
             conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
@@ -75,19 +80,14 @@ public class JdbcAccountDao extends AbstractJdbcDao<Account> implements AccountD
             updateAccounts(conn, transaction, fromAccount, toAccount);
             conn.commit();
         } catch (SQLException se) {
-            // rollback transaction
             log.error("transferAccountBalance(): User Transaction Failed, rollback initiated for: " + transaction, se);
-            try {
-                if (conn != null) {
-                    conn.rollback();
-                }
-            } catch (SQLException re) {
-                throw new RuntimeException("Rollback failed!");
-            }
+            rollbackTransaction(conn);
+            return false;
+        } catch (Exception e) {
+            log.error(e);
             return false;
         } finally {
             DbUtils.closeQuietly(conn);
-            DbUtils.closeQuietly(updateStmt);
         }
         return true;
     }

@@ -3,6 +3,7 @@ package com.tsoyolv.transfermoney.model;
 import java.math.BigDecimal;
 
 public class Transaction {
+
     private long accountFrom;
 
     private long accountTo;
@@ -41,5 +42,15 @@ public class Transaction {
 
     public void setCurrencyCode(String currencyCode) {
         this.currencyCode = currencyCode;
+    }
+
+    @Override
+    public String toString() {
+        return "Transaction{" +
+                "accountFrom=" + accountFrom +
+                ", accountTo=" + accountTo +
+                ", amount=" + amount +
+                ", currencyCode='" + currencyCode + '\'' +
+                '}';
     }
 }

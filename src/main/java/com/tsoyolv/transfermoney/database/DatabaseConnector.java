@@ -32,4 +32,20 @@ public class DatabaseConnector {
         return DriverManager.getConnection(ApplicationProperties.getProperty(DB_CONNECTION_URL_PROPERTY_NAME),
                 ApplicationProperties.getProperty(DB_USER_PROPERTY_NAME), ApplicationProperties.getProperty(DB_PASSWORD_PROPERTY_NAME));
     }
+
+    /**
+     * Rollback transaction
+     * @param conn connection
+     */
+    public static boolean rollbackTransaction(Connection conn) {
+        try {
+            if (conn != null) {
+                conn.rollback();
+                return true;
+            }
+        } catch (SQLException re) {
+            throw new RuntimeException("Rollback failed!", re);
+        }
+        return false;
+    }
 }

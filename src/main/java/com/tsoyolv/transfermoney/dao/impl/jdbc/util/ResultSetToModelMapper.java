@@ -1,4 +1,4 @@
-package com.tsoyolv.transfermoney.dao.impl.jdbc;
+package com.tsoyolv.transfermoney.dao.impl.jdbc.util;
 
 import com.tsoyolv.transfermoney.model.DbEntity;
 import org.apache.logging.log4j.LogManager;

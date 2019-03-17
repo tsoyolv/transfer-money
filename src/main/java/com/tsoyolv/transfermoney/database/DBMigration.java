@@ -1,6 +1,7 @@
 package com.tsoyolv.transfermoney.database;
 
 import com.tsoyolv.transfermoney.ApplicationProperties;
+import org.apache.commons.dbutils.DbUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 import org.glassfish.jersey.server.internal.scanning.ResourceFinderException;
@@ -13,6 +14,7 @@ import java.sql.Connection;
 import java.sql.SQLException;
 
 import static com.tsoyolv.transfermoney.ApplicationProperties.DB_INSERT_TEST_DATA_PROPERTY_NAME;
+import static com.tsoyolv.transfermoney.database.DatabaseConnector.rollbackTransaction;
 
 /**
  * Run sql scripts to create tables
@@ -38,14 +40,20 @@ public class DBMigration {
     }
 
     private static void runSqlScript(String scriptName) throws SQLException {
-        try (Connection conn = DatabaseConnector.getConnection()) {
+        Connection conn = DatabaseConnector.getConnection();
+        try {
+            conn.setAutoCommit(false);
             RunScript.execute(conn, getScriptAsInputStreamReader(ROOT_DB_MIGRATION + scriptName));
+            conn.commit();
         } catch (SQLException e) {
-            log.error("Db migration for script: " + scriptName + " failed", e);
+            rollbackTransaction(conn);
+            log.error("Db migration for script: " + scriptName + " failed. Rollback.", e);
             throw e;
         } catch (ResourceFinderException e) {
             log.error("There is no script with name: " + scriptName, e);
             throw e;
+        } finally {
+            DbUtils.closeQuietly(conn);
         }
     }
 
