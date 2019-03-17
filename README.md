@@ -18,12 +18,33 @@ Java 10 or higher
     - or Jetty by Spark
 - REST Service
     - Jersey + JAXB for marshalling/unmarshalling
+- Mapping model to DTO
+    - Orika
+
+### Project structure
+
+#### Sources: 
+Main packages for sources:
+1. dao - Interfaces and Implementations for Data access objects.
+2. database - Database connections and utils.
+3. embeddedserver - Embedded server realizations. Main method of each embeddedServer id "startServer"
+4. model - java-entity for table in Database. To use standard get/save dao must implements DbEntity (Core entity where each column mapped to java object field)
+5. rest - controllers, webModels. Each webModel mapped to DbEntity model via Orika
+#### Resources:
+
+- src/main/resources/applicaion.properties - App settings
+- src/main/resources/dbmigration - Migration scripts
+- src/main/resources/log4j2.xml - Log4j2 Configuration
+- src/test/resources/jsonexamples - Json examples for testing REST API
+
 
 ### Configure
 
 To configure change src/main/resources/application.properties file:
 1. Properties db_* - for database settings
 2. Properties server_* - for embedded server configuration
+
+For configure db migration see src/main/resources/dbmigration. 
 
 ### Start
 To start application use command:
@@ -66,14 +87,14 @@ See src/test/resources/jsonexamples/accountcontroller
 }
 ```
 
-#### Transfer:
+##### Transfer:
 
 See src/test/resources/jsonexamples/accountcontroller
 
 ```sh
 {
-  "accountFrom" : 1,
-  "accountTo" : 2,
+  "accountFromId" : 1,
+  "accountToId" : 2,
   "amount" : 12,
   "currencyCode" : "RUR"
 }

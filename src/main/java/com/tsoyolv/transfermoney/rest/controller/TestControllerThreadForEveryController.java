@@ -37,6 +37,7 @@ public class TestControllerThreadForEveryController {
     @GET
     public Response get() {
         THREAD_NAMES.add(threadName);
+        System.out.println("TestControllerThreadForEveryController get Thread: " + Thread.currentThread().getName() + ". This: " + threadName);
         return Response.status(Response.Status.OK).build();
     }
 }

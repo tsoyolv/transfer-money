@@ -17,6 +17,10 @@ import java.util.concurrent.TimeUnit;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
+/**
+ * This Test shows that embedded Jetty + Jersey Servlet creates new Controller (Service with @Path) for every HTTP-request.
+ * It means that every request potentially Thread-safe.
+ */
 public class ThreadForEveryControllerTest extends AbstractControllerIntegrationTest {
 
     @Test
