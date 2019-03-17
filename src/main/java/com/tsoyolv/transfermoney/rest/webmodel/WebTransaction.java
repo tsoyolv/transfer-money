@@ -8,34 +8,34 @@ public class WebTransaction {
     }
 
     public WebTransaction(long accountFrom, long accountTo, BigDecimal amount, String currencyCode) {
-        this.accountFrom = accountFrom;
-        this.accountTo = accountTo;
+        this.accountFromId = accountFrom;
+        this.accountToId = accountTo;
         this.amount = amount;
         this.currencyCode = currencyCode;
     }
 
-    private long accountFrom;
+    private long accountFromId;
 
-    private long accountTo;
+    private long accountToId;
 
     private BigDecimal amount;
 
     private String currencyCode;
 
-    public long getAccountFrom() {
-        return accountFrom;
+    public long getAccountFromId() {
+        return accountFromId;
     }
 
-    public void setAccountFrom(long accountFrom) {
-        this.accountFrom = accountFrom;
+    public void setAccountFromId(long accountFromId) {
+        this.accountFromId = accountFromId;
     }
 
-    public long getAccountTo() {
-        return accountTo;
+    public long getAccountToId() {
+        return accountToId;
     }
 
-    public void setAccountTo(long accountTo) {
-        this.accountTo = accountTo;
+    public void setAccountToId(long accountToId) {
+        this.accountToId = accountToId;
     }
 
     public BigDecimal getAmount() {
@@ -57,8 +57,8 @@ public class WebTransaction {
     @Override
     public String toString() {
         return "WebTransaction{" +
-                "accountFrom=" + accountFrom +
-                ", accountTo=" + accountTo +
+                "accountFrom=" + accountFromId +
+                ", accountTo=" + accountToId +
                 ", amount=" + amount +
                 ", currencyCode='" + currencyCode + '\'' +
                 '}';

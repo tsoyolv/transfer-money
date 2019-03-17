@@ -1,10 +1,10 @@
 package com.tsoyolv.transfermoney.rest.controller;
 
+import com.tsoyolv.transfermoney.UriPath;
 import com.tsoyolv.transfermoney.dao.AccountDao;
 import com.tsoyolv.transfermoney.dao.impl.jdbc.JdbcAccountDao;
 import com.tsoyolv.transfermoney.model.Account;
 import com.tsoyolv.transfermoney.model.Transaction;
-import com.tsoyolv.transfermoney.UriPath;
 import com.tsoyolv.transfermoney.rest.webmodel.WebAccount;
 import com.tsoyolv.transfermoney.rest.webmodel.WebTransaction;
 import ma.glasnost.orika.MapperFacade;
@@ -18,7 +18,7 @@ import javax.ws.rs.Produces;
 import javax.ws.rs.WebApplicationException;
 import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
-import java.util.List;
+import java.util.Collection;
 
 @Path(UriPath.ACCOUNT_ROOT_PATH)
 @Produces(MediaType.APPLICATION_JSON)
@@ -29,13 +29,13 @@ public class AccountController {
     private MapperFacade mapperFacade = new DefaultMapperFactory.Builder().build().getMapperFacade();
 
     @GET
-    public List<WebAccount> get() {
-        List<Account> accounts = accountDao.get();
+    public Collection<WebAccount> get() {
+        Collection<Account> accounts = accountDao.get();
         return mapperFacade.mapAsList(accounts, WebAccount.class);
     }
 
     @GET
-    @Path(UriPath.GET_ACCOUNT_BY_ID_PATH)
+    @Path("/{accountId}")
     public WebAccount get(@PathParam("accountId") long accountId) {
         Account account = accountDao.get(accountId);
         return mapperFacade.map(account, WebAccount.class);

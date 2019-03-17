@@ -1,31 +1,44 @@
 package com.tsoyolv.transfermoney.model;
 
+import com.tsoyolv.transfermoney.model.annotation.Id;
+
 import java.math.BigDecimal;
 
-public class Transaction {
+public class Transaction implements DbEntity {
 
-    private long accountFrom;
+    @Id
+    private long transactionId;
 
-    private long accountTo;
+    private long accountFromId;
+
+    private long accountToId;
 
     private BigDecimal amount;
 
     private String currencyCode;
 
-    public long getAccountFrom() {
-        return accountFrom;
+    public long getTransactionId() {
+        return transactionId;
     }
 
-    public void setAccountFrom(long accountFrom) {
-        this.accountFrom = accountFrom;
+    public void setTransactionId(long transactionId) {
+        this.transactionId = transactionId;
     }
 
-    public long getAccountTo() {
-        return accountTo;
+    public long getAccountFromId() {
+        return accountFromId;
     }
 
-    public void setAccountTo(long accountTo) {
-        this.accountTo = accountTo;
+    public void setAccountFromId(long accountFromId) {
+        this.accountFromId = accountFromId;
+    }
+
+    public long getAccountToId() {
+        return accountToId;
+    }
+
+    public void setAccountToId(long accountToId) {
+        this.accountToId = accountToId;
     }
 
     public BigDecimal getAmount() {
@@ -47,8 +60,8 @@ public class Transaction {
     @Override
     public String toString() {
         return "Transaction{" +
-                "accountFrom=" + accountFrom +
-                ", accountTo=" + accountTo +
+                "accountFrom=" + accountFromId +
+                ", accountTo=" + accountToId +
                 ", amount=" + amount +
                 ", currencyCode='" + currencyCode + '\'' +
                 '}';

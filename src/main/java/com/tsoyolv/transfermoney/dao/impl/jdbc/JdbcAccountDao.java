@@ -9,6 +9,7 @@ import org.apache.commons.dbutils.DbUtils;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import javax.ws.rs.NotSupportedException;
 import java.math.BigDecimal;
 import java.math.RoundingMode;
 import java.sql.Connection;
@@ -26,6 +27,8 @@ public class JdbcAccountDao extends AbstractJdbcDao<Account> implements AccountD
     private static final BigDecimal zeroAmount = new BigDecimal(0).setScale(2, RoundingMode.HALF_EVEN);
 
     private ResultSetToModelMapper<Account> resultSetToModelMapper = new ResultSetToModelMapper<>();
+
+    private JdbcTransactionDao transactionDao = new JdbcTransactionDao();
 
     @Override
     public Account get(Long accountId) {
@@ -75,9 +78,10 @@ public class JdbcAccountDao extends AbstractJdbcDao<Account> implements AccountD
         try {
             conn = DatabaseConnector.getConnection();
             conn.setAutoCommit(false);
-            Account fromAccount = lockAccountById(transaction.getAccountFrom(), conn);
-            Account toAccount = lockAccountById(transaction.getAccountTo(), conn);
+            Account fromAccount = lockAccountById(transaction.getAccountFromId(), conn);
+            Account toAccount = lockAccountById(transaction.getAccountToId(), conn);
             updateAccounts(conn, transaction, fromAccount, toAccount);
+            transactionDao.save(transaction);
             conn.commit();
         } catch (SQLException se) {
             log.error("transferAccountBalance(): User Transaction Failed, rollback initiated for: " + transaction, se);
@@ -92,16 +96,21 @@ public class JdbcAccountDao extends AbstractJdbcDao<Account> implements AccountD
         return true;
     }
 
+    @Override
+    public Account delete(Account forDelete) {
+        throw new NotSupportedException("not implemented yet");
+    }
+
     private void updateAccounts(Connection conn, Transaction transaction, Account from, Account to) throws SQLException {
         PreparedStatement updateStmt = null;
         BigDecimal fromAccountLeftOver = checkAndGetFromAccountLeftover(transaction, from);
         try {
             updateStmt = conn.prepareStatement("UPDATE ACCOUNT SET BALANCE = ? WHERE ACCOUNTID = ?");
             updateStmt.setBigDecimal(1, fromAccountLeftOver);
-            updateStmt.setLong(2, transaction.getAccountFrom());
+            updateStmt.setLong(2, transaction.getAccountFromId());
             updateStmt.addBatch();
             updateStmt.setBigDecimal(1, to.getBalance().add(transaction.getAmount()));
-            updateStmt.setLong(2, transaction.getAccountTo());
+            updateStmt.setLong(2, transaction.getAccountToId());
             updateStmt.addBatch();
             int[] rowsUpdated = updateStmt.executeBatch();
             if (rowsUpdated[0] + rowsUpdated[1] != 2) {

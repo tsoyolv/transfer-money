@@ -13,6 +13,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.tsoyolv.transfermoney.database.DatabaseConnector.rollbackTransaction;
+
 public abstract class AbstractJdbcDao<T extends DbEntity> {
 
     private ResultSetToModelMapper<T> resultSetToModelMapper = new ResultSetToModelMapper<>();
@@ -27,7 +29,8 @@ public abstract class AbstractJdbcDao<T extends DbEntity> {
         ResultSet rs = null;
         try {
             conn = DatabaseConnector.getConnection();
-            stmt = conn.prepareStatement("SELECT * FROM " + t.getClass().getSimpleName() + " WHERE ACCOUNTID = ?");
+            String idFieldName = getIdFieldName(t);
+            stmt = conn.prepareStatement("SELECT * FROM " + t.getClass().getSimpleName() + " WHERE " + idFieldName + " = ?");
             stmt.setLong(1, id);
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -39,12 +42,23 @@ public abstract class AbstractJdbcDao<T extends DbEntity> {
         return null;
     }
 
+    private String getIdFieldName(T entity) {
+        Field[] declaredFields = entity.getClass().getDeclaredFields();
+        for (Field field : declaredFields) {
+            if (field.isAnnotationPresent(Id.class)) {
+                return field.getName();
+            }
+        }
+        return null;
+    }
+
     public T save(T forSave) throws SQLException {
         Connection connection = null;
         PreparedStatement statementForSaveEntity = null;
         ResultSet generatedKeys = null;
         try {
             connection = DatabaseConnector.getConnection();
+            connection.setAutoCommit(false);
             statementForSaveEntity = updateCreator.createPreparedStatementForSave(forSave, connection);
             int affectedRows = statementForSaveEntity.executeUpdate();
             if (affectedRows == 0) {
@@ -53,10 +67,14 @@ public abstract class AbstractJdbcDao<T extends DbEntity> {
             generatedKeys = statementForSaveEntity.getGeneratedKeys();
             if (generatedKeys.next()) {
                 setEntityIdField(forSave, generatedKeys.getLong(1));
-                return forSave;
             } else {
-                throw new RuntimeException("Creating " + forSave.getClass().getSimpleName() + " failed, no ID obtained.");
+                throw new SQLException("Creating " + forSave.getClass().getSimpleName() + " failed, no ID obtained.");
             }
+            connection.commit();
+            return forSave;
+        } catch (SQLException se) {
+            rollbackTransaction(connection);
+            throw se;
         } finally {
             DbUtils.closeQuietly(connection, statementForSaveEntity, generatedKeys);
         }

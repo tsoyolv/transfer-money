@@ -35,7 +35,7 @@ public class ResultSetToModelMapper<T extends DbEntity> {
     }
 
     private Object getRsValue(String fieldName, Class fieldType, ResultSet resultSet) throws SQLException {
-        if (Long.class.equals(fieldType)) {
+        if (Long.class.equals(fieldType) || long.class.equals(fieldType)) {
             return resultSet.getLong(fieldName);
         } else if (Date.class.equals(fieldType)) {
             return resultSet.getDate(fieldName);

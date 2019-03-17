@@ -1,6 +1,6 @@
 {
-  "accountFrom" : 4,
-  "accountTo" : 1,
+  "accountFromId" : 4,
+  "accountToId" : 1,
   "amount" : 44,
   "currencyCode" : "RUR"
 }
