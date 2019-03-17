@@ -5,6 +5,16 @@ import com.tsoyolv.transfermoney.model.annotation.Id;
 import java.math.BigDecimal;
 
 public class Account implements DbEntity {
+
+    public Account() {
+    }
+
+    public Account(Long accountId, String accountNumber, BigDecimal balance) {
+        this.accountId = accountId;
+        this.accountNumber = accountNumber;
+        this.balance = balance;
+    }
+
     @Id
     private Long accountId;
 

@@ -25,14 +25,15 @@ import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.Scanner;
 
-public abstract class AbstractControllerTest {
+public abstract class AbstractControllerIntegrationTest {
     private static AbstractEmbeddedServer embeddedServer = new JettyEmbeddedServer(AccountController.class.getPackageName(), false);
     private static PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager();
-    private static String ROOT_JSON_EXAMPLES_PATH = "jsonexamples" + File.separator;
-    protected static final String HOST = embeddedServer.getServerHost() + ":" + embeddedServer.getServerPort();
     protected static HttpClient commonClient;
-    protected ObjectMapper mapper = new ObjectMapper();
-    protected URIBuilder builder = new URIBuilder().setScheme("http").setHost(HOST);
+    private static final String ROOT_JSON_EXAMPLES_PATH = "jsonexamples" + File.separator;
+    private static final String HOST = embeddedServer.getServerHost() + ":" + embeddedServer.getServerPort();
+    private static final String URI_SCHEME = "http";
+
+    private ObjectMapper mapper = new ObjectMapper();
 
     @BeforeClass
     public static void setup() throws Exception {
@@ -52,7 +53,7 @@ public abstract class AbstractControllerTest {
     }
 
     protected HttpResponse httpGet(String url, HttpClient client) throws URISyntaxException, IOException {
-        URI uri = new URIBuilder().setScheme("http").setHost(HOST).setPath(url).build();
+        URI uri = new URIBuilder().setScheme(URI_SCHEME).setHost(HOST).setPath(url).build();
         HttpGet request = new HttpGet(uri);
         return client.execute(request);
     }
@@ -69,7 +70,7 @@ public abstract class AbstractControllerTest {
     }
 
     protected HttpResponse httpPost(String url, Object entity, HttpClient client) throws URISyntaxException, IOException {
-        URI uri = new URIBuilder().setScheme("http").setHost(HOST).setPath(url).build();
+        URI uri = new URIBuilder().setScheme(URI_SCHEME).setHost(HOST).setPath(url).build();
         String jsonInString = mapper.writeValueAsString(entity);
         StringEntity strEntity = new StringEntity(jsonInString);
         HttpPost request = new HttpPost(uri);
@@ -96,8 +97,8 @@ public abstract class AbstractControllerTest {
 
     protected <T> T parseJsonExampleByFileName(String fileName, Class<T> clazz) throws IOException {
         InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(ROOT_JSON_EXAMPLES_PATH + fileName);
-        Scanner s = new Scanner(resourceAsStream).useDelimiter("\\A");
-        String json = s.hasNext() ? s.next() : "";
+        Scanner scanner = new Scanner(resourceAsStream).useDelimiter("\\A");
+        String json = scanner.hasNext() ? scanner.next() : "";
         return mapper.readValue(json, clazz);
     }
 }

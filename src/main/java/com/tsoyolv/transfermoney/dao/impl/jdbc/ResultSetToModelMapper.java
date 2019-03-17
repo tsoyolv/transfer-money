@@ -17,17 +17,21 @@ public class ResultSetToModelMapper<T extends DbEntity> {
     public T map(ResultSet resultSet, T dbEntity) throws SQLException {
         Field[] fields = dbEntity.getClass().getDeclaredFields();
         for (Field declaredField : fields) {
-            boolean accessible = declaredField.isAccessible();
-            declaredField.setAccessible(true);
-            String name = declaredField.getName();
-            try {
-                declaredField.set(dbEntity, getRsValue(name, declaredField.getType(), resultSet));
-            } catch (IllegalAccessException e) {
-                log.warn("Cannot map resultset to model", e);
-            }
-            declaredField.setAccessible(accessible);
+            setEntityFieldFromResultSet(resultSet, dbEntity, declaredField);
         }
         return dbEntity;
+    }
+
+    private void setEntityFieldFromResultSet(ResultSet resultSet, T dbEntity, Field declaredField) throws SQLException {
+        boolean accessible = declaredField.isAccessible();
+        declaredField.setAccessible(true);
+        String name = declaredField.getName();
+        try {
+            declaredField.set(dbEntity, getRsValue(name, declaredField.getType(), resultSet));
+        } catch (IllegalAccessException e) {
+            log.warn("Cannot map resultset to model", e);
+        }
+        declaredField.setAccessible(accessible);
     }
 
     private Object getRsValue(String fieldName, Class fieldType, ResultSet resultSet) throws SQLException {

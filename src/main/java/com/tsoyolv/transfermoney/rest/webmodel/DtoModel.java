@@ -1,4 +1,6 @@
 package com.tsoyolv.transfermoney.rest.webmodel;
 
-public interface DtoModel {
+import java.io.Serializable;
+
+public interface DtoModel extends Serializable {
 }

@@ -15,59 +15,28 @@ import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JdbcAccountDao implements AccountDao {
+public class JdbcAccountDao extends AbstractJdbcDao<Account> implements AccountDao {
     private static final Logger log = LogManager.getLogger(ResultSetToModelMapper.class);
     private static final BigDecimal zeroAmount = new BigDecimal(0).setScale(2, RoundingMode.HALF_EVEN);
 
     private ResultSetToModelMapper<Account> resultSetToModelMapper = new ResultSetToModelMapper<>();
-    private PreparedStatementForUpdateCreator<Account> updateCreator = new PreparedStatementForUpdateCreator<>();
 
     @Override
     public Account get(Long accountId) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
         try {
-            conn = DatabaseConnector.getConnection();
-            stmt = conn.prepareStatement("SELECT * FROM ACCOUNT WHERE ACCOUNTID = ?");
-            stmt.setLong(1, accountId);
-            rs = stmt.executeQuery();
-            if (rs.next()) {
-                return resultSetToModelMapper.map(rs, new Account());
-            }
+            return super.get(accountId, new Account());
         } catch (SQLException e) {
             log.warn("Cannot get account", e);
-        } finally {
-            DbUtils.closeQuietly(conn, stmt, rs);
         }
         return null;
     }
 
     @Override
     public Account save(Account account) {
-        Connection conn = null;
-        PreparedStatement stmt = null;
-        ResultSet generatedKeys = null;
         try {
-            conn = DatabaseConnector.getConnection();
-            stmt = updateCreator.createPreparedStatementForUpdate(account, conn);
-            int affectedRows = stmt.executeUpdate();
-            if (affectedRows == 0) {
-                log.error("Creating account failed, no rows affected.");
-                throw new RuntimeException("Creating account failed, no rows affected.");
-            }
-            generatedKeys = stmt.getGeneratedKeys();
-            if (generatedKeys.next()) {
-                account.setAccountId(generatedKeys.getLong(1));
-                return account;
-            } else {
-                log.error("Creating account failed, no ID obtained.");
-                throw new RuntimeException("Creating account failed, no ID obtained.");
-            }
+            return super.save(account);
         } catch (SQLException e) {
             log.error("Error Inserting Account  " + account);
-        } finally {
-            DbUtils.closeQuietly(conn, stmt, generatedKeys);
         }
         return null;
     }

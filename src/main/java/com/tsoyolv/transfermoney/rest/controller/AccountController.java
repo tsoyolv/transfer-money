@@ -52,7 +52,6 @@ public class AccountController {
     @Path(UriPath.TRANSFER_BETWEEN_ACCOUNTS_PATH)
     public Response transfer(WebTransaction webTransaction) {
         Transaction transaction = mapperFacade.map(webTransaction, Transaction.class);
-        String currency = transaction.getCurrencyCode();
         boolean success = accountDao.transferMoney(transaction);
         if (success) {
             return Response.status(Response.Status.OK).build();
