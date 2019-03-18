@@ -16,6 +16,8 @@ public class JettyEmbeddedServer extends AbstractEmbeddedServer {
 
     private boolean joinServer;
 
+    private Server server = new Server();
+
     public JettyEmbeddedServer(String packageForHttpControllers, boolean joinServer) {
         this.packageForHttpControllers = packageForHttpControllers;
         this.joinServer = joinServer;
@@ -26,7 +28,6 @@ public class JettyEmbeddedServer extends AbstractEmbeddedServer {
      */
     @Override
     public void startServer() throws Exception {
-        Server server = new Server();
         server.addConnector(createServerConnector(server));
         server.setHandler(createServletContextHandler());
         try {
@@ -39,6 +40,12 @@ public class JettyEmbeddedServer extends AbstractEmbeddedServer {
                 server.destroy();
             }
         }
+    }
+
+    @Override
+    public void stopServer() throws Exception {
+        server.stop();
+        server.destroy();
     }
 
     private ServerConnector createServerConnector(Server server) {

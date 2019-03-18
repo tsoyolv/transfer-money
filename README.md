@@ -46,6 +46,14 @@ To configure change src/main/resources/application.properties file:
 
 For configure db migration see src/main/resources/dbmigration. 
 
+### Test
+To start application use command:
+```sh
+gradlew test
+```
+src/test/java - tests sources
+
+After test see build/reports/tests/test/index.html for results.
 ### Start
 To start application use command:
 ```sh
@@ -57,7 +65,7 @@ gradlew run
 
 Application starts a jetty server on localhost port 8082 (by default). An H2 in-memory database initialized with account data.
 
-- http://localhost:8080/account
+- http://localhost:8082/rest/account
 
 ### Available Services
 

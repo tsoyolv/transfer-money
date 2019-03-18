@@ -14,8 +14,8 @@ import org.apache.http.entity.StringEntity;
 import org.apache.http.impl.client.HttpClients;
 import org.apache.http.impl.conn.PoolingHttpClientConnectionManager;
 import org.apache.http.util.EntityUtils;
-import org.junit.AfterClass;
-import org.junit.BeforeClass;
+import org.junit.After;
+import org.junit.Before;
 
 import javax.ws.rs.core.MediaType;
 import java.io.File;
@@ -26,19 +26,22 @@ import java.net.URISyntaxException;
 import java.util.Scanner;
 
 public abstract class AbstractControllerIntegrationTest {
-    private static EmbeddedServer embeddedServer = new JettyEmbeddedServer(AccountController.class.getPackageName(), false);
-    private static PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager();
-    protected static HttpClient commonClient;
     private static final String ROOT_JSON_EXAMPLES_PATH = "jsonexamples" + File.separator;
-    private static final String HOST = embeddedServer.getServerHost() + ":" + embeddedServer.getServerPort();
     private static final String URI_SCHEME = "http";
+
+    private EmbeddedServer embeddedServer = new JettyEmbeddedServer(AccountController.class.getPackageName(), false);
+
+    private final String HOST = embeddedServer.getServerHost() + ":" + embeddedServer.getServerPort();
 
     private ObjectMapper mapper = new ObjectMapper();
 
-    @BeforeClass
-    public static void setup() throws Exception {
+    protected HttpClient commonClient;
+
+    @Before // todo change server starting and stopping for every Integration test. Change for all integration Test (if it possible).
+    public void setup() throws Exception {
         DBMigration.runSqlScripts();
         embeddedServer.startServer();
+        PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager();
         connManager.setDefaultMaxPerRoute(100);
         connManager.setMaxTotal(200);
         commonClient = HttpClients.custom()
@@ -47,9 +50,10 @@ public abstract class AbstractControllerIntegrationTest {
                 .build();
     }
 
-    @AfterClass
-    public static void closeClient() {
+    @After
+    public void closeClient() throws Exception {
         HttpClientUtils.closeQuietly(commonClient);
+        embeddedServer.stopServer();
     }
 
     protected HttpResponse httpGet(String url, HttpClient client) throws URISyntaxException, IOException {
@@ -97,6 +101,9 @@ public abstract class AbstractControllerIntegrationTest {
 
     protected <T> T parseJsonExampleByFileName(String fileName, Class<T> clazz) throws IOException {
         InputStream resourceAsStream = Thread.currentThread().getContextClassLoader().getResourceAsStream(ROOT_JSON_EXAMPLES_PATH + fileName);
+        if (resourceAsStream == null) {
+            throw new IOException("There is no file with filename: " + fileName);
+        }
         Scanner scanner = new Scanner(resourceAsStream).useDelimiter("\\A");
         String json = scanner.hasNext() ? scanner.next() : "";
         return mapper.readValue(json, clazz);

@@ -8,6 +8,12 @@ public interface EmbeddedServer {
      */
     void startServer() throws Exception;
 
+    /**
+     * Stops embedded server
+     * @throws Exception if server can't stop
+     */
+    void stopServer() throws Exception;
+
     String getServerHost();
 
     Integer getServerPort() ;
