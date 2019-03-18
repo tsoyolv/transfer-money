@@ -1,7 +1,10 @@
-package com.tsoyolv.transfermoney;
+package com.tsoyolv.transfermoney.rest;
 
-public interface UriPath {
-    String SERVER_ROOT_PATH = "/";
+/**
+ * Constants for Uri Paths.
+ * Constant interfaces are good only in simple projects, otherwise there will be version control conflicts!
+ */
+public interface RestPaths {
     String REST_ROOT_PATH = "/rest";
 
     String ACCOUNT_ROOT_PATH = "/account";

@@ -1,10 +1,10 @@
 package com.tsoyolv.transfermoney.rest.controller;
 
-import com.tsoyolv.transfermoney.UriPath;
 import com.tsoyolv.transfermoney.dao.AccountDao;
 import com.tsoyolv.transfermoney.dao.impl.jdbc.JdbcAccountDao;
-import com.tsoyolv.transfermoney.model.Account;
-import com.tsoyolv.transfermoney.model.Transaction;
+import com.tsoyolv.transfermoney.entity.Account;
+import com.tsoyolv.transfermoney.entity.Transaction;
+import com.tsoyolv.transfermoney.rest.RestPaths;
 import com.tsoyolv.transfermoney.rest.webmodel.WebAccount;
 import com.tsoyolv.transfermoney.rest.webmodel.WebTransaction;
 import ma.glasnost.orika.MapperFacade;
@@ -20,7 +20,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import java.util.Collection;
 
-@Path(UriPath.ACCOUNT_ROOT_PATH)
+@Path(RestPaths.ACCOUNT_ROOT_PATH)
 @Produces(MediaType.APPLICATION_JSON)
 public class AccountController {
 
@@ -49,7 +49,7 @@ public class AccountController {
     }
 
     @POST
-    @Path(UriPath.TRANSFER_BETWEEN_ACCOUNTS_PATH)
+    @Path(RestPaths.TRANSFER_BETWEEN_ACCOUNTS_PATH)
     public Response transfer(WebTransaction webTransaction) {
         Transaction transaction = mapperFacade.map(webTransaction, Transaction.class);
         boolean success = accountDao.transferMoney(transaction);

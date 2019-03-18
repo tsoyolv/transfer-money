@@ -1,7 +1,7 @@
 package com.tsoyolv.transfermoney.dao.impl.jdbc.util;
 
-import com.tsoyolv.transfermoney.model.DbEntity;
-import com.tsoyolv.transfermoney.model.annotation.Id;
+import com.tsoyolv.transfermoney.entity.DbEntity;
+import com.tsoyolv.transfermoney.entity.annotation.Id;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

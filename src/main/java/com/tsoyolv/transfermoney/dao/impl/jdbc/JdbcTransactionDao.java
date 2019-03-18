@@ -1,7 +1,7 @@
 package com.tsoyolv.transfermoney.dao.impl.jdbc;
 
 import com.tsoyolv.transfermoney.dao.TransactionDao;
-import com.tsoyolv.transfermoney.model.Transaction;
+import com.tsoyolv.transfermoney.entity.Transaction;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 

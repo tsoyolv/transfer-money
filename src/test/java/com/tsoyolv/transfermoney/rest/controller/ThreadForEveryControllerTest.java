@@ -1,6 +1,6 @@
 package com.tsoyolv.transfermoney.rest.controller;
 
-import com.tsoyolv.transfermoney.UriPath;
+import com.tsoyolv.transfermoney.rest.RestPaths;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.junit.Test;
@@ -38,6 +38,8 @@ public class ThreadForEveryControllerTest extends AbstractControllerIntegrationT
             Set<String> stringSet = new HashSet<>(TestControllerThreadForEveryController.THREAD_NAMES);
             assertNotNull(TestControllerThreadForEveryController.THREAD_NAMES);
             assertEquals(TestControllerThreadForEveryController.THREAD_NAMES.size(), stringSet.size());
+            assertEquals(threadsAmount, stringSet.size());
+            System.out.println(TestControllerThreadForEveryController.THREAD_NAMES.size());
             Iterator<String> iterator = TestControllerThreadForEveryController.THREAD_NAMES.iterator();
             while (iterator.hasNext()) {
                 System.out.print(iterator.next() + " || ");
@@ -50,7 +52,7 @@ public class ThreadForEveryControllerTest extends AbstractControllerIntegrationT
         @Override
         public void run() {
             try {
-                HttpResponse httpResponse = httpGet(UriPath.REST_ROOT_PATH + UriPath.TEST_THREAD_SAFE_CONTROLLER, commonClient);
+                HttpResponse httpResponse = httpGet(RestPaths.REST_ROOT_PATH + RestPaths.TEST_THREAD_SAFE_CONTROLLER, commonClient);
                 if (HttpStatus.SC_OK != httpResponse.getStatusLine().getStatusCode()) {
                     System.out.println("FAIL");
                     throw new RuntimeException("FAIL");

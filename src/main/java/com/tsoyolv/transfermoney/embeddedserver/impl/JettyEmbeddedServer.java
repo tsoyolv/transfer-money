@@ -1,6 +1,5 @@
-package com.tsoyolv.transfermoney.embeddedserver;
+package com.tsoyolv.transfermoney.embeddedserver.impl;
 
-import com.tsoyolv.transfermoney.UriPath;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;
@@ -12,6 +11,7 @@ import org.glassfish.jersey.servlet.ServletContainer;
  */
 public class JettyEmbeddedServer extends AbstractEmbeddedServer {
 
+    private static final String REST_ROOT_PATH = "/rest";
     private String packageForHttpControllers;
 
     private boolean joinServer;
@@ -51,8 +51,8 @@ public class JettyEmbeddedServer extends AbstractEmbeddedServer {
 
     private ServletContextHandler createServletContextHandler() {
         ServletContextHandler servletContextHandler = new ServletContextHandler(ServletContextHandler.NO_SESSIONS);
-        servletContextHandler.setContextPath(UriPath.SERVER_ROOT_PATH);
-        ServletHolder servletHolder = servletContextHandler.addServlet(ServletContainer.class, UriPath.REST_ROOT_PATH + "/*");
+        servletContextHandler.setContextPath(getServerRootPath());
+        ServletHolder servletHolder = servletContextHandler.addServlet(ServletContainer.class, REST_ROOT_PATH + "/*");
         servletHolder.setInitOrder(1);
         servletHolder.setInitParameter("jersey.config.server.provider.packages", packageForHttpControllers);
         return servletContextHandler;

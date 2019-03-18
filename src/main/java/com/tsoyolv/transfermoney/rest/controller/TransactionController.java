@@ -1,8 +1,8 @@
 package com.tsoyolv.transfermoney.rest.controller;
 
-import com.tsoyolv.transfermoney.UriPath;
 import com.tsoyolv.transfermoney.dao.TransactionDao;
 import com.tsoyolv.transfermoney.dao.impl.jdbc.JdbcTransactionDao;
+import com.tsoyolv.transfermoney.rest.RestPaths;
 import com.tsoyolv.transfermoney.rest.webmodel.WebTransaction;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.impl.DefaultMapperFactory;
@@ -13,7 +13,7 @@ import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path(UriPath.TRANSACTION_ROOT_PATH)
+@Path(RestPaths.TRANSACTION_ROOT_PATH)
 @Produces(MediaType.APPLICATION_JSON)
 public class TransactionController {
 

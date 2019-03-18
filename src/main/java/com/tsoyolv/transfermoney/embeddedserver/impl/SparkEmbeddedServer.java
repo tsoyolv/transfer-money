@@ -1,4 +1,4 @@
-package com.tsoyolv.transfermoney.embeddedserver;
+package com.tsoyolv.transfermoney.embeddedserver.impl;
 
 import spark.Spark;
 

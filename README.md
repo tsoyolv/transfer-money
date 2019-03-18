@@ -28,7 +28,7 @@ Main packages for sources:
 1. dao - Interfaces and Implementations for Data access objects.
 2. database - Database connections and utils.
 3. embeddedserver - Embedded server realizations. Main method of each embeddedServer id "startServer"
-4. model - java-entity for table in Database. To use standard get/save dao must implements DbEntity (Core entity where each column mapped to java object field)
+4. entity - java-entity for tables in Database. To use standard get/save dao must implements DbEntity (Core entity where each column mapped to java object field)
 5. rest - controllers, webModels. Each webModel mapped to DbEntity model via Orika
 #### Resources:
 

@@ -1,6 +1,6 @@
 package com.tsoyolv.transfermoney;
 
-import com.tsoyolv.transfermoney.model.Account;
+import com.tsoyolv.transfermoney.entity.Account;
 import org.junit.Test;
 
 import java.math.BigDecimal;
@@ -9,6 +9,7 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 public class SharedObjectInMultipleThreadsTest {
+
     @Test
     public void testMultipleThreads() throws InterruptedException {
         ExecutorService executor = Executors.newFixedThreadPool(10);

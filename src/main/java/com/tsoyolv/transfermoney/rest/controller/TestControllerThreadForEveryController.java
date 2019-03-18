@@ -1,6 +1,6 @@
 package com.tsoyolv.transfermoney.rest.controller;
 
-import com.tsoyolv.transfermoney.UriPath;
+import com.tsoyolv.transfermoney.rest.RestPaths;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -12,7 +12,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
-@Path(UriPath.TEST_THREAD_SAFE_CONTROLLER)
+@Path(RestPaths.TEST_THREAD_SAFE_CONTROLLER)
 @Produces(MediaType.APPLICATION_JSON)
 public class TestControllerThreadForEveryController {
     public static final List<String> THREAD_NAMES = Collections.synchronizedList(new ArrayList<>());

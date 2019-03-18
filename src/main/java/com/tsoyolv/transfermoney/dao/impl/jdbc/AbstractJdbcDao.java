@@ -3,8 +3,8 @@ package com.tsoyolv.transfermoney.dao.impl.jdbc;
 import com.tsoyolv.transfermoney.dao.impl.jdbc.util.PreparedStatementForSaveCreator;
 import com.tsoyolv.transfermoney.dao.impl.jdbc.util.ResultSetToModelMapper;
 import com.tsoyolv.transfermoney.database.DatabaseConnector;
-import com.tsoyolv.transfermoney.model.DbEntity;
-import com.tsoyolv.transfermoney.model.annotation.Id;
+import com.tsoyolv.transfermoney.entity.DbEntity;
+import com.tsoyolv.transfermoney.entity.annotation.Id;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.lang.reflect.Field;

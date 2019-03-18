@@ -2,8 +2,8 @@ package com.tsoyolv.transfermoney.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsoyolv.transfermoney.database.DBMigration;
-import com.tsoyolv.transfermoney.embeddedserver.AbstractEmbeddedServer;
-import com.tsoyolv.transfermoney.embeddedserver.JettyEmbeddedServer;
+import com.tsoyolv.transfermoney.embeddedserver.EmbeddedServer;
+import com.tsoyolv.transfermoney.embeddedserver.impl.JettyEmbeddedServer;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -26,7 +26,7 @@ import java.net.URISyntaxException;
 import java.util.Scanner;
 
 public abstract class AbstractControllerIntegrationTest {
-    private static AbstractEmbeddedServer embeddedServer = new JettyEmbeddedServer(AccountController.class.getPackageName(), false);
+    private static EmbeddedServer embeddedServer = new JettyEmbeddedServer(AccountController.class.getPackageName(), false);
     private static PoolingHttpClientConnectionManager connManager = new PoolingHttpClientConnectionManager();
     protected static HttpClient commonClient;
     private static final String ROOT_JSON_EXAMPLES_PATH = "jsonexamples" + File.separator;

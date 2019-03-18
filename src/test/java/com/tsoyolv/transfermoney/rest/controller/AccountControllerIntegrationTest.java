@@ -1,6 +1,6 @@
 package com.tsoyolv.transfermoney.rest.controller;
 
-import com.tsoyolv.transfermoney.UriPath;
+import com.tsoyolv.transfermoney.rest.RestPaths;
 import com.tsoyolv.transfermoney.rest.webmodel.WebAccount;
 import com.tsoyolv.transfermoney.rest.webmodel.WebTransaction;
 import org.apache.http.HttpResponse;
@@ -21,8 +21,8 @@ import static org.junit.Assert.assertNotNull;
 
 
 public class AccountControllerIntegrationTest extends AbstractControllerIntegrationTest {
-    private static final String GET_ACCOUNTS_REST_PATH = UriPath.REST_ROOT_PATH + UriPath.ACCOUNT_ROOT_PATH;
-    private static final String TRANSFER_REST_PATH = UriPath.REST_ROOT_PATH + UriPath.ACCOUNT_ROOT_PATH + UriPath.TRANSFER_BETWEEN_ACCOUNTS_PATH;
+    private static final String GET_ACCOUNTS_REST_PATH = RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH;
+    private static final String TRANSFER_REST_PATH = RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH + RestPaths.TRANSFER_BETWEEN_ACCOUNTS_PATH;
     private static final String JSON_ACCOUNT_EXAMPLES_DIRECTORY_PATH = "accountcontroller" + File.separator;
 
     @Test
@@ -62,7 +62,7 @@ public class AccountControllerIntegrationTest extends AbstractControllerIntegrat
     @Test
     public void testCreate() throws IOException, URISyntaxException {
         WebAccount webAccountForPost = parseJsonExampleByFileName(JSON_ACCOUNT_EXAMPLES_DIRECTORY_PATH + "createAccount.json", WebAccount.class);
-        HttpResponse response = httpPost(UriPath.REST_ROOT_PATH + UriPath.ACCOUNT_ROOT_PATH, webAccountForPost, commonClient);
+        HttpResponse response = httpPost(RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH, webAccountForPost, commonClient);
         assertNotNull(response);
         assertEquals(HttpStatus.SC_OK, response.getStatusLine().getStatusCode());
         assertNotNull(response.getEntity());
