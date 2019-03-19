@@ -52,7 +52,7 @@ public class PreparedStatementForSaveCreator<T extends DbEntity> {
         return insertQuery.append(questionMarks).toString();
     }
 
-    protected Map<Integer, Field> createPreparedStatementParameters(T entity) {
+    private Map<Integer, Field> createPreparedStatementParameters(T entity) {
         if (entity == null) {
             return null;
         }
@@ -73,7 +73,7 @@ public class PreparedStatementForSaveCreator<T extends DbEntity> {
     }
 
     private void setPreparedStatementParameter(T entity, PreparedStatement stmt, int index, Field field) throws SQLException {
-        boolean accessible = field.isAccessible();
+        boolean accessible = field.canAccess(entity);
         field.setAccessible(true);
         if (Long.class.equals(field.getType())) {
             Object value = getFieldValue(entity, field);

@@ -17,6 +17,9 @@ import static com.tsoyolv.transfermoney.database.DatabaseConnector.rollbackTrans
 
 public abstract class AbstractJdbcDao<T extends DbEntity> {
 
+    private static final String SELECT_FROM = "SELECT * FROM ";
+    private static final String WHERE = " WHERE ";
+
     private ResultSetToModelMapper<T> resultSetToModelMapper = new ResultSetToModelMapper<>();
     private PreparedStatementForSaveCreator<T> updateCreator = new PreparedStatementForSaveCreator<>();
 
@@ -29,8 +32,8 @@ public abstract class AbstractJdbcDao<T extends DbEntity> {
         ResultSet rs = null;
         try {
             conn = DatabaseConnector.getConnection();
-            String idFieldName = getIdFieldName(t);
-            stmt = conn.prepareStatement("SELECT * FROM " + t.getClass().getSimpleName() + " WHERE " + idFieldName + " = ?");
+            String idFieldName = getEntityIdFieldName(t);
+            stmt = conn.prepareStatement(SELECT_FROM + t.getClass().getSimpleName() + WHERE + idFieldName + " = ?");
             stmt.setLong(1, id);
             rs = stmt.executeQuery();
             if (rs.next()) {
@@ -38,16 +41,6 @@ public abstract class AbstractJdbcDao<T extends DbEntity> {
             }
         } finally {
             DbUtils.closeQuietly(conn, stmt, rs);
-        }
-        return null;
-    }
-
-    private String getIdFieldName(T entity) {
-        Field[] declaredFields = entity.getClass().getDeclaredFields();
-        for (Field field : declaredFields) {
-            if (field.isAnnotationPresent(Id.class)) {
-                return field.getName();
-            }
         }
         return null;
     }
@@ -80,11 +73,21 @@ public abstract class AbstractJdbcDao<T extends DbEntity> {
         }
     }
 
+    private String getEntityIdFieldName(T entity) {
+        Field[] declaredFields = entity.getClass().getDeclaredFields();
+        for (Field field : declaredFields) {
+            if (field.isAnnotationPresent(Id.class)) {
+                return field.getName();
+            }
+        }
+        return null;
+    }
+
     private void setEntityIdField(T entity, Long id) {
         Field[] declaredFields = entity.getClass().getDeclaredFields();
         for (Field field : declaredFields) {
             if (field.isAnnotationPresent(Id.class)) {
-                boolean accessible = field.isAccessible();
+                boolean accessible = field.canAccess(entity);
                 field.setAccessible(true);
                 try {
                     field.set(entity, id);

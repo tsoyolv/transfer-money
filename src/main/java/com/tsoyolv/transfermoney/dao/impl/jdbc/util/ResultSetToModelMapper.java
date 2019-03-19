@@ -23,7 +23,7 @@ public class ResultSetToModelMapper<T extends DbEntity> {
     }
 
     private void setEntityFieldFromResultSet(ResultSet resultSet, T dbEntity, Field declaredField) throws SQLException {
-        boolean accessible = declaredField.isAccessible();
+        boolean accessible = declaredField.canAccess(dbEntity);
         declaredField.setAccessible(true);
         String name = declaredField.getName();
         try {
