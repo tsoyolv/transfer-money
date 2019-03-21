@@ -1,6 +1,6 @@
 package com.tsoyolv.transfermoney.embeddedserver.impl.spark.requestlog;
 
-import com.tsoyolv.transfermoney.log.LoggerWrapper;
+import com.tsoyolv.transfermoney.LoggerWrapper;
 import org.eclipse.jetty.server.AbstractNCSARequestLog;
 import spark.embeddedserver.EmbeddedServers;
 import spark.embeddedserver.jetty.EmbeddedJettyFactory;

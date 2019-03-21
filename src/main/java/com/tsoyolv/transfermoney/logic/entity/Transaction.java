@@ -1,6 +1,6 @@
-package com.tsoyolv.transfermoney.entity;
+package com.tsoyolv.transfermoney.logic.entity;
 
-import com.tsoyolv.transfermoney.entity.annotation.Id;
+import com.tsoyolv.transfermoney.logic.entity.annotation.Id;
 
 import java.math.BigDecimal;
 

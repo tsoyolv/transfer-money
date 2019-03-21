@@ -1,5 +1,6 @@
 package com.tsoyolv.transfermoney.embeddedserver.impl;
 
+import com.tsoyolv.transfermoney.embeddedserver.AbstractEmbeddedServer;
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.ServerConnector;
 import org.eclipse.jetty.servlet.ServletContextHandler;

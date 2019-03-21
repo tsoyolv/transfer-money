@@ -1,11 +1,11 @@
-package com.tsoyolv.transfermoney.dao.impl.jdbc;
+package com.tsoyolv.transfermoney.logic.dao.impl.jdbc;
 
-import com.tsoyolv.transfermoney.dao.AccountDao;
-import com.tsoyolv.transfermoney.dao.impl.jdbc.util.ResultSetToModelMapper;
+import com.tsoyolv.transfermoney.logic.dao.AccountDao;
+import com.tsoyolv.transfermoney.logic.dao.impl.jdbc.util.ResultSetToModelMapper;
 import com.tsoyolv.transfermoney.database.DatabaseConnector;
-import com.tsoyolv.transfermoney.entity.Account;
-import com.tsoyolv.transfermoney.entity.Transaction;
-import com.tsoyolv.transfermoney.log.LoggerWrapper;
+import com.tsoyolv.transfermoney.logic.entity.Account;
+import com.tsoyolv.transfermoney.logic.entity.Transaction;
+import com.tsoyolv.transfermoney.LoggerWrapper;
 import org.apache.commons.dbutils.DbUtils;
 
 import javax.ws.rs.NotSupportedException;

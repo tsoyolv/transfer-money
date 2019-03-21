@@ -1,4 +1,4 @@
-package com.tsoyolv.transfermoney.log;
+package com.tsoyolv.transfermoney;
 
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;

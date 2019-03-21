@@ -1,6 +1,6 @@
-package com.tsoyolv.transfermoney.dao;
+package com.tsoyolv.transfermoney.logic.dao;
 
-import com.tsoyolv.transfermoney.entity.DbEntity;
+import com.tsoyolv.transfermoney.logic.entity.DbEntity;
 
 import java.util.Collection;
 

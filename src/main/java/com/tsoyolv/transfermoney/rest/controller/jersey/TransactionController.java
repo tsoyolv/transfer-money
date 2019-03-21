@@ -1,7 +1,7 @@
 package com.tsoyolv.transfermoney.rest.controller.jersey;
 
-import com.tsoyolv.transfermoney.dao.TransactionDao;
-import com.tsoyolv.transfermoney.dao.impl.jdbc.JdbcTransactionDao;
+import com.tsoyolv.transfermoney.logic.dao.TransactionDao;
+import com.tsoyolv.transfermoney.logic.dao.impl.jdbc.JdbcTransactionDao;
 import com.tsoyolv.transfermoney.rest.RestPaths;
 import com.tsoyolv.transfermoney.rest.webmodel.WebTransaction;
 import ma.glasnost.orika.MapperFacade;

@@ -1,6 +1,6 @@
 package com.tsoyolv.transfermoney;
 
-import com.tsoyolv.transfermoney.entity.Account;
+import com.tsoyolv.transfermoney.logic.entity.Account;
 import org.junit.Test;
 
 import java.math.BigDecimal;

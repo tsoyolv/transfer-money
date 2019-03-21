@@ -25,11 +25,14 @@ Java 10 or higher
 
 #### Sources: 
 Main packages for sources:
-1. dao - Interfaces and Implementations for Data access objects.
-2. database - Database connections and utils.
-3. embeddedserver - Embedded server realizations. Main method of each embeddedServer id "startServer"
-4. entity - java-entity for tables in Database. To use standard get/save dao must implements DbEntity (Core entity where each column mapped to java object field)
-5. rest - controllers, webModels. Each webModel mapped to DbEntity model via Orika
+1. database - Database connections and utils.
+2. embeddedserver - Embedded server realizations. Main method of each embeddedServer id "startServer"
+3. rest - controllers, webModels. Each webModel mapped to DbEntity model via Orika
+4. logic 
+    - entity - java-entity for tables in Database. To use standard get/save dao must implements DbEntity (Core entity where each column mapped to java object field)
+    - dao - Interfaces and Implementations for Data access objects.
+    - service - second layer, uses Dao.
+
 #### Resources:
 
 - src/main/resources/applicaion.properties - App settings

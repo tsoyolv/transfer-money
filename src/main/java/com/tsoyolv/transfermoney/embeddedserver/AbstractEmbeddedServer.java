@@ -1,15 +1,11 @@
-package com.tsoyolv.transfermoney.embeddedserver.impl;
+package com.tsoyolv.transfermoney.embeddedserver;
 
 import com.tsoyolv.transfermoney.ApplicationProperties;
-import com.tsoyolv.transfermoney.embeddedserver.EmbeddedServer;
 
 import static com.tsoyolv.transfermoney.ApplicationProperties.SERVER_HOST_PROPERTY_NAME;
 import static com.tsoyolv.transfermoney.ApplicationProperties.SERVER_IDLE_TIMEOUT_PROPERTY_NAME;
 import static com.tsoyolv.transfermoney.ApplicationProperties.SERVER_PORT_PROPERTY_NAME;
 
-/**
- * Abstract embedded server
- */
 public abstract class AbstractEmbeddedServer implements EmbeddedServer {
     private static final String DEFAULT_HOST = "localhost";
     private static final String DEFAULT_SERVER_ROOT_PATH = "/";

@@ -1,7 +1,7 @@
 package com.tsoyolv.transfermoney.database;
 
 import com.tsoyolv.transfermoney.ApplicationProperties;
-import com.tsoyolv.transfermoney.log.LoggerWrapper;
+import com.tsoyolv.transfermoney.LoggerWrapper;
 import org.apache.commons.dbutils.DbUtils;
 import org.glassfish.jersey.server.internal.scanning.ResourceFinderException;
 import org.h2.tools.RunScript;
@@ -14,10 +14,11 @@ import java.sql.SQLException;
 
 import static com.tsoyolv.transfermoney.ApplicationProperties.DB_INSERT_TEST_DATA_PROPERTY_NAME;
 import static com.tsoyolv.transfermoney.database.DatabaseConnector.rollbackTransaction;
-import static com.tsoyolv.transfermoney.log.LoggerWrapper.JDBC_LOGGER_NAME;
+import static com.tsoyolv.transfermoney.LoggerWrapper.JDBC_LOGGER_NAME;
 
 /**
- * Run sql scripts to create tables
+ * Run sql scripts to create tables.
+ * Can be changed to migration framework (liquibase or flyway)
  */
 public class DBMigration {
 

@@ -1,9 +1,9 @@
 package com.tsoyolv.transfermoney.rest.controller.jersey;
 
-import com.tsoyolv.transfermoney.dao.AccountDao;
-import com.tsoyolv.transfermoney.dao.impl.jdbc.JdbcAccountDao;
-import com.tsoyolv.transfermoney.entity.Account;
-import com.tsoyolv.transfermoney.entity.Transaction;
+import com.tsoyolv.transfermoney.logic.dao.AccountDao;
+import com.tsoyolv.transfermoney.logic.dao.impl.jdbc.JdbcAccountDao;
+import com.tsoyolv.transfermoney.logic.entity.Account;
+import com.tsoyolv.transfermoney.logic.entity.Transaction;
 import com.tsoyolv.transfermoney.rest.RestPaths;
 import com.tsoyolv.transfermoney.rest.webmodel.WebAccount;
 import com.tsoyolv.transfermoney.rest.webmodel.WebTransaction;

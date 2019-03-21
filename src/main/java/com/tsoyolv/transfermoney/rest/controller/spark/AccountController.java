@@ -1,8 +1,8 @@
 package com.tsoyolv.transfermoney.rest.controller.spark;
 
-import com.tsoyolv.transfermoney.dao.AccountDao;
-import com.tsoyolv.transfermoney.dao.impl.jdbc.JdbcAccountDao;
-import com.tsoyolv.transfermoney.entity.Account;
+import com.tsoyolv.transfermoney.logic.dao.AccountDao;
+import com.tsoyolv.transfermoney.logic.dao.impl.jdbc.JdbcAccountDao;
+import com.tsoyolv.transfermoney.logic.entity.Account;
 import com.tsoyolv.transfermoney.rest.webmodel.WebAccount;
 import ma.glasnost.orika.MapperFacade;
 import ma.glasnost.orika.impl.DefaultMapperFactory;

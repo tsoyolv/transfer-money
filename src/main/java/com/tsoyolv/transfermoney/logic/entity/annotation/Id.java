@@ -1,4 +1,4 @@
-package com.tsoyolv.transfermoney.entity.annotation;
+package com.tsoyolv.transfermoney.logic.entity.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

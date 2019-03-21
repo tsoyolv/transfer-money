@@ -1,8 +1,8 @@
-package com.tsoyolv.transfermoney.dao.impl.jdbc.util;
+package com.tsoyolv.transfermoney.logic.dao.impl.jdbc.util;
 
-import com.tsoyolv.transfermoney.entity.DbEntity;
-import com.tsoyolv.transfermoney.entity.annotation.Id;
-import com.tsoyolv.transfermoney.log.LoggerWrapper;
+import com.tsoyolv.transfermoney.logic.entity.DbEntity;
+import com.tsoyolv.transfermoney.logic.entity.annotation.Id;
+import com.tsoyolv.transfermoney.LoggerWrapper;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.tsoyolv.transfermoney.log.LoggerWrapper.JDBC_LOGGER_NAME;
+import static com.tsoyolv.transfermoney.LoggerWrapper.JDBC_LOGGER_NAME;
 
 public class PreparedStatementForSaveCreator<T extends DbEntity> {
 

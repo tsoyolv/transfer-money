@@ -1,11 +1,11 @@
 package com.tsoyolv.transfermoney.embeddedserver.impl.spark;
 
-import com.tsoyolv.transfermoney.embeddedserver.impl.AbstractEmbeddedServer;
+import com.tsoyolv.transfermoney.embeddedserver.AbstractEmbeddedServer;
 import com.tsoyolv.transfermoney.embeddedserver.impl.spark.requestlog.SparkUtils;
-import com.tsoyolv.transfermoney.log.LoggerWrapper;
+import com.tsoyolv.transfermoney.LoggerWrapper;
 import com.tsoyolv.transfermoney.rest.controller.spark.AccountController;
 
-import static com.tsoyolv.transfermoney.log.LoggerWrapper.REQUESTS_LOGGER_NAME;
+import static com.tsoyolv.transfermoney.LoggerWrapper.REQUESTS_LOGGER_NAME;
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.stop;

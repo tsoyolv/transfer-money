@@ -1,8 +1,8 @@
-package com.tsoyolv.transfermoney.dao.impl.jdbc;
+package com.tsoyolv.transfermoney.logic.dao.impl.jdbc;
 
-import com.tsoyolv.transfermoney.dao.TransactionDao;
-import com.tsoyolv.transfermoney.entity.Transaction;
-import com.tsoyolv.transfermoney.log.LoggerWrapper;
+import com.tsoyolv.transfermoney.logic.dao.TransactionDao;
+import com.tsoyolv.transfermoney.logic.entity.Transaction;
+import com.tsoyolv.transfermoney.LoggerWrapper;
 
 import javax.ws.rs.NotSupportedException;
 import java.sql.SQLException;

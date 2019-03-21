@@ -3,7 +3,6 @@ package com.tsoyolv.transfermoney;
 import com.tsoyolv.transfermoney.database.DBMigration;
 import com.tsoyolv.transfermoney.embeddedserver.EmbeddedServer;
 import com.tsoyolv.transfermoney.embeddedserver.impl.spark.SparkEmbeddedServer;
-import com.tsoyolv.transfermoney.log.LoggerWrapper;
 
 import java.sql.SQLException;
 

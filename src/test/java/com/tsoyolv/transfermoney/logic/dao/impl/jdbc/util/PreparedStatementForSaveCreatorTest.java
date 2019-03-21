@@ -1,6 +1,6 @@
-package com.tsoyolv.transfermoney.dao.impl.jdbc.util;
+package com.tsoyolv.transfermoney.logic.dao.impl.jdbc.util;
 
-import com.tsoyolv.transfermoney.entity.Account;
+import com.tsoyolv.transfermoney.logic.entity.Account;
 import org.junit.Test;
 
 import java.math.BigDecimal;

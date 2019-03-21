@@ -1,11 +1,11 @@
-package com.tsoyolv.transfermoney.dao.impl.jdbc;
+package com.tsoyolv.transfermoney.logic.dao.impl.jdbc;
 
-import com.tsoyolv.transfermoney.dao.impl.jdbc.util.PreparedStatementForSaveCreator;
-import com.tsoyolv.transfermoney.dao.impl.jdbc.util.ResultSetToModelMapper;
+import com.tsoyolv.transfermoney.logic.dao.impl.jdbc.util.PreparedStatementForSaveCreator;
+import com.tsoyolv.transfermoney.logic.dao.impl.jdbc.util.ResultSetToModelMapper;
 import com.tsoyolv.transfermoney.database.DatabaseConnector;
-import com.tsoyolv.transfermoney.entity.DbEntity;
-import com.tsoyolv.transfermoney.entity.annotation.Id;
-import com.tsoyolv.transfermoney.log.LoggerWrapper;
+import com.tsoyolv.transfermoney.logic.entity.DbEntity;
+import com.tsoyolv.transfermoney.logic.entity.annotation.Id;
+import com.tsoyolv.transfermoney.LoggerWrapper;
 import org.apache.commons.dbutils.DbUtils;
 
 import java.lang.reflect.Field;
@@ -16,7 +16,7 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static com.tsoyolv.transfermoney.database.DatabaseConnector.rollbackTransaction;
-import static com.tsoyolv.transfermoney.log.LoggerWrapper.JDBC_LOGGER_NAME;
+import static com.tsoyolv.transfermoney.LoggerWrapper.JDBC_LOGGER_NAME;
 
 public abstract class AbstractJdbcDao<T extends DbEntity> {
     private static final LoggerWrapper log = LoggerWrapper.getLogger(JDBC_LOGGER_NAME);
