@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tsoyolv.transfermoney.database.DBMigration;
 import com.tsoyolv.transfermoney.embeddedserver.EmbeddedServer;
 import com.tsoyolv.transfermoney.embeddedserver.impl.JettyEmbeddedServer;
+import com.tsoyolv.transfermoney.rest.controller.jersey.AccountController;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;

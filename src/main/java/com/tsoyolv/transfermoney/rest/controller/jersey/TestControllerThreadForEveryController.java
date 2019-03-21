@@ -1,4 +1,4 @@
-package com.tsoyolv.transfermoney.rest.controller;
+package com.tsoyolv.transfermoney.rest.controller.jersey;
 
 import com.tsoyolv.transfermoney.rest.RestPaths;
 

@@ -1,6 +1,7 @@
-package com.tsoyolv.transfermoney.rest.controller;
+package com.tsoyolv.transfermoney.rest.controller.jersey;
 
 import com.tsoyolv.transfermoney.rest.RestPaths;
+import com.tsoyolv.transfermoney.rest.controller.AbstractControllerIntegrationTest;
 import org.apache.http.HttpResponse;
 import org.apache.http.HttpStatus;
 import org.junit.Test;

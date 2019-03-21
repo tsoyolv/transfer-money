@@ -1,11 +1,13 @@
 package com.tsoyolv.transfermoney.embeddedserver.impl.spark;
 
-import org.apache.log4j.Logger;
 import com.tsoyolv.transfermoney.embeddedserver.impl.AbstractEmbeddedServer;
 import com.tsoyolv.transfermoney.embeddedserver.impl.spark.requestlog.SparkUtils;
-import spark.Spark;
+import com.tsoyolv.transfermoney.rest.controller.spark.AccountController;
+import org.apache.log4j.Logger;
 
-import javax.ws.rs.NotSupportedException;
+import static spark.Spark.get;
+import static spark.Spark.port;
+import static spark.Spark.stop;
 
 /**
  * Server based on Spark framework for boot REST'full application
@@ -19,12 +21,13 @@ public class SparkEmbeddedServer extends AbstractEmbeddedServer {
     public void startServer() throws Exception {
         Logger logger = Logger.getLogger(SparkEmbeddedServer.class);
         SparkUtils.createServerWithRequestLog(logger);
-        Spark.port(getServerPort());
-        Spark.get("/hello", (req, res) -> "Hello World");
+        port(getServerPort());
+        get("/hello", (req, res) -> "Hello World");
+        get("/account", AccountController.getAccounts);
     }
 
     @Override
     public void stopServer() throws Exception {
-        throw new NotSupportedException("not implemented yet");
+        stop();
     }
 }
