@@ -2,9 +2,10 @@ package com.tsoyolv.transfermoney.embeddedserver.impl.spark;
 
 import com.tsoyolv.transfermoney.embeddedserver.impl.AbstractEmbeddedServer;
 import com.tsoyolv.transfermoney.embeddedserver.impl.spark.requestlog.SparkUtils;
+import com.tsoyolv.transfermoney.log.LoggerWrapper;
 import com.tsoyolv.transfermoney.rest.controller.spark.AccountController;
-import org.apache.log4j.Logger;
 
+import static com.tsoyolv.transfermoney.log.LoggerWrapper.REQUESTS_LOGGER_NAME;
 import static spark.Spark.get;
 import static spark.Spark.port;
 import static spark.Spark.stop;
@@ -19,7 +20,7 @@ public class SparkEmbeddedServer extends AbstractEmbeddedServer {
      */
     @Override
     public void startServer() throws Exception {
-        Logger logger = Logger.getLogger(SparkEmbeddedServer.class);
+        LoggerWrapper logger = LoggerWrapper.getLogger(REQUESTS_LOGGER_NAME);
         SparkUtils.createServerWithRequestLog(logger);
         port(getServerPort());
         get("/hello", (req, res) -> "Hello World");

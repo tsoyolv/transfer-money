@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Configuration status="debug" strict="true" name="XMLConfigTest" packages="com.tsoyolv.transfermoney">
     <Properties>
-        <Property name="filename">logs/test.log</Property>
+        <Property name="filename">logs/log.log</Property>
+        <Property name="requestlog">logs/server-http-requests.log</Property>
+        <Property name="jdbcLog">logs/jdbc-log.log</Property>
     </Properties>
 
     <Filter type="ThresholdFilter" level="trace"/>
@@ -12,9 +14,37 @@
                 <Pattern>%d %p %C{1.} [%t] %m%n</Pattern>
             </Layout>
         </Appender>
+        <Appender type="File" name="JdbcLog" fileName="${jdbcLog}">
+            <Layout type="PatternLayout">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n</Pattern>
+            </Layout>
+        </Appender>
+        <Appender type="File" name="Request" fileName="${requestlog}">
+            <Layout type="PatternLayout">
+                <Pattern>%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n</Pattern>
+            </Layout>
+        </Appender>
+        <!-- todo change to similar log4j2 config: -->
+        <!--<appender name="file" class="org.apache.log4j.RollingFileAppender">
+            <param name="append" value="false" />
+            <param name="maxFileSize" value="10KB" />
+            <param name="maxBackupIndex" value="5" />
+            &lt;!&ndash; For Tomcat &ndash;&gt;
+            <param name="file" value="logs/server-http-requests.log" />
+            <layout class="org.apache.log4j.PatternLayout">
+                <param name="ConversionPattern"
+                       value="%d{yyyy-MM-dd HH:mm:ss} %-5p %c{1}:%L - %m%n" />
+            </layout>
+        </appender>-->
     </Appenders>
 
     <Loggers>
+        <Logger name="request.logger" level="debug">
+            <AppenderRef ref="Request"/>
+        </Logger>
+        <Logger name="jdbc.logger" level="debug">
+            <AppenderRef ref="JdbcLog"/>
+        </Logger>
         <Root level="all">
             <AppenderRef ref="File"/>
         </Root>

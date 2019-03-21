@@ -2,13 +2,24 @@ package com.tsoyolv.transfermoney.rest.controller.spark;
 
 import com.tsoyolv.transfermoney.dao.AccountDao;
 import com.tsoyolv.transfermoney.dao.impl.jdbc.JdbcAccountDao;
+import com.tsoyolv.transfermoney.entity.Account;
+import com.tsoyolv.transfermoney.rest.webmodel.WebAccount;
+import ma.glasnost.orika.MapperFacade;
+import ma.glasnost.orika.impl.DefaultMapperFactory;
 import spark.Request;
 import spark.Response;
 import spark.Route;
 
+import java.util.Collection;
+
 public class AccountController {
 
-    public static AccountDao accountDao = new JdbcAccountDao();
+    private static AccountDao accountDao = new JdbcAccountDao();
 
-    public static Route getAccounts = (Request request, Response response) -> accountDao.get();
+    private static MapperFacade mapperFacade = new DefaultMapperFactory.Builder().build().getMapperFacade();
+
+    public static Route getAccounts = (Request request, Response response) -> {
+        Collection<Account> accounts = accountDao.get();
+        return mapperFacade.mapAsList(accounts, WebAccount.class);
+    };
 }

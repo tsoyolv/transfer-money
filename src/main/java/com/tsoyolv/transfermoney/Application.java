@@ -3,8 +3,7 @@ package com.tsoyolv.transfermoney;
 import com.tsoyolv.transfermoney.database.DBMigration;
 import com.tsoyolv.transfermoney.embeddedserver.EmbeddedServer;
 import com.tsoyolv.transfermoney.embeddedserver.impl.spark.SparkEmbeddedServer;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.tsoyolv.transfermoney.log.LoggerWrapper;
 
 import java.sql.SQLException;
 
@@ -13,7 +12,7 @@ import java.sql.SQLException;
  */
 public class Application {
 
-    private static final Logger log = LogManager.getLogger(Application.class);
+    private static final LoggerWrapper log = LoggerWrapper.getLogger(Application.class);
 
     private static EmbeddedServer embeddedServer;
 

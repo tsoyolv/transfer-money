@@ -2,8 +2,7 @@ package com.tsoyolv.transfermoney.dao.impl.jdbc.util;
 
 import com.tsoyolv.transfermoney.entity.DbEntity;
 import com.tsoyolv.transfermoney.entity.annotation.Id;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.tsoyolv.transfermoney.log.LoggerWrapper;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -13,9 +12,11 @@ import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.Map;
 
+import static com.tsoyolv.transfermoney.log.LoggerWrapper.JDBC_LOGGER_NAME;
+
 public class PreparedStatementForSaveCreator<T extends DbEntity> {
 
-    private static final Logger log = LogManager.getLogger(PreparedStatementForSaveCreator.class);
+    private static final LoggerWrapper log = LoggerWrapper.getLogger(JDBC_LOGGER_NAME);
     private static final String INSERT_INTO = "INSERT INTO ";
     private static final String VALUES = " VALUES (";
 

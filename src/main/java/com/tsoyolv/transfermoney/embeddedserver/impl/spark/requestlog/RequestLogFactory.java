@@ -1,15 +1,13 @@
 package com.tsoyolv.transfermoney.embeddedserver.impl.spark.requestlog;
 
-import org.apache.log4j.Logger;
+import com.tsoyolv.transfermoney.log.LoggerWrapper;
 import org.eclipse.jetty.server.AbstractNCSARequestLog;
-
-import java.io.IOException;
 
 public class RequestLogFactory {
 
-    private Logger logger;
+    private LoggerWrapper logger;
 
-    public RequestLogFactory(Logger logger) {
+    public RequestLogFactory(LoggerWrapper logger) {
         this.logger = logger;
     }
 
@@ -21,7 +19,7 @@ public class RequestLogFactory {
             }
 
             @Override
-            public void write(String s) throws IOException {
+            public void write(String s) {
                 logger.info(s);
             }
         };

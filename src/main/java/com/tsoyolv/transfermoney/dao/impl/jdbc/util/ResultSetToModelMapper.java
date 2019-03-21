@@ -1,8 +1,7 @@
 package com.tsoyolv.transfermoney.dao.impl.jdbc.util;
 
 import com.tsoyolv.transfermoney.entity.DbEntity;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.tsoyolv.transfermoney.log.LoggerWrapper;
 
 import java.lang.reflect.Field;
 import java.math.BigDecimal;
@@ -10,9 +9,11 @@ import java.sql.Date;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
+import static com.tsoyolv.transfermoney.log.LoggerWrapper.JDBC_LOGGER_NAME;
+
 public class ResultSetToModelMapper<T extends DbEntity> {
 
-    private static final Logger log = LogManager.getLogger(ResultSetToModelMapper.class);
+    private static final LoggerWrapper log = LoggerWrapper.getLogger(JDBC_LOGGER_NAME);
 
     public T map(ResultSet resultSet, T dbEntity) throws SQLException {
         Field[] fields = dbEntity.getClass().getDeclaredFields();

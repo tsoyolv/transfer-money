@@ -5,9 +5,8 @@ import com.tsoyolv.transfermoney.dao.impl.jdbc.util.ResultSetToModelMapper;
 import com.tsoyolv.transfermoney.database.DatabaseConnector;
 import com.tsoyolv.transfermoney.entity.Account;
 import com.tsoyolv.transfermoney.entity.Transaction;
+import com.tsoyolv.transfermoney.log.LoggerWrapper;
 import org.apache.commons.dbutils.DbUtils;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import javax.ws.rs.NotSupportedException;
 import java.math.BigDecimal;
@@ -23,7 +22,7 @@ import java.util.List;
 import static com.tsoyolv.transfermoney.database.DatabaseConnector.rollbackTransaction;
 
 public class JdbcAccountDao extends AbstractJdbcDao<Account> implements AccountDao {
-    private static final Logger log = LogManager.getLogger(ResultSetToModelMapper.class);
+    private static final LoggerWrapper log = LoggerWrapper.getLogger(ResultSetToModelMapper.class);
     private static final BigDecimal zeroAmount = new BigDecimal(0).setScale(2, RoundingMode.HALF_EVEN);
 
     private ResultSetToModelMapper<Account> resultSetToModelMapper = new ResultSetToModelMapper<>();
@@ -59,7 +58,7 @@ public class JdbcAccountDao extends AbstractJdbcDao<Account> implements AccountD
         try {
             conn = DatabaseConnector.getConnection();
             stmt = conn.createStatement();
-            rs = stmt.executeQuery("SELECT * FROM ACCOUNT");
+            rs = stmt.executeQuery(getSelectSqlForTable(Account.class.getSimpleName(), null));
             while (rs.next()) {
                 accounts.add(resultSetToModelMapper.map(rs, new Account()));
             }
@@ -88,7 +87,7 @@ public class JdbcAccountDao extends AbstractJdbcDao<Account> implements AccountD
             rollbackTransaction(conn);
             return false;
         } catch (Exception e) {
-            log.error(e);
+            log.error("Transfer money failed", e);
             return false;
         } finally {
             DbUtils.closeQuietly(conn);

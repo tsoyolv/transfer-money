@@ -2,8 +2,7 @@ package com.tsoyolv.transfermoney.dao.impl.jdbc;
 
 import com.tsoyolv.transfermoney.dao.TransactionDao;
 import com.tsoyolv.transfermoney.entity.Transaction;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import com.tsoyolv.transfermoney.log.LoggerWrapper;
 
 import javax.ws.rs.NotSupportedException;
 import java.sql.SQLException;
@@ -11,7 +10,7 @@ import java.util.Collection;
 
 public class JdbcTransactionDao extends AbstractJdbcDao<Transaction> implements TransactionDao {
 
-    private static final Logger log = LogManager.getLogger(JdbcTransactionDao.class);
+    private static final LoggerWrapper log = LoggerWrapper.getLogger(JdbcTransactionDao.class);
 
     @Override
     public Transaction get(Long id) {
