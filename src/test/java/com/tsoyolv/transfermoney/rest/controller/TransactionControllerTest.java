@@ -23,5 +23,4 @@ public class TransactionControllerTest extends AbstractControllerIntegrationTest
         assertNotNull(webTransaction);
         assertEquals(new BigDecimal(100).setScale(2), webTransaction.getAmount());
     }
-
 }
