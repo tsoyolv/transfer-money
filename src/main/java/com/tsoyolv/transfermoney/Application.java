@@ -31,6 +31,9 @@ public class Application {
         } catch (ClassNotFoundException e) {
             log.error("Cannot find db driver");
             throw e;
+        } catch (Exception e) {
+            log.error("Application start failed!", e);
+            throw e;
         }
     }
 }
