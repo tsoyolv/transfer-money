@@ -49,6 +49,9 @@ dependencies {
     compile group: 'org.jooq', name: 'jooq-codegen', version: '3.11.0' // needs only for JooqGenerator 
 
     compile group: 'com.google.inject', name: 'guice', version: '4.2.2' // DI (dependency injection)
+
+    compile group: 'org.apache.commons', name: 'commons-dbcp2', version: '2.6.0' // for BasicDataSource
+
 }
 
 apply plugin: 'java'

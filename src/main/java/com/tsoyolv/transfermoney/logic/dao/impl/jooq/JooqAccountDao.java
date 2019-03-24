@@ -2,13 +2,17 @@ package com.tsoyolv.transfermoney.logic.dao.impl.jooq;
 
 import com.google.inject.Inject;
 import com.tsoyolv.transfermoney.LoggerWrapper;
+import com.tsoyolv.transfermoney.generated.jooq.tables.records.AccountRecord;
 import com.tsoyolv.transfermoney.logic.dao.AccountDao;
 import com.tsoyolv.transfermoney.logic.entity.Account;
 import com.tsoyolv.transfermoney.logic.entity.Transaction;
 import org.jooq.DSLContext;
+import org.jooq.InsertQuery;
+import org.jooq.Query;
 import org.jooq.Record;
 import org.jooq.RecordMapper;
 import org.jooq.SelectQuery;
+import org.jooq.impl.DSL;
 
 import javax.ws.rs.NotSupportedException;
 import java.math.BigInteger;
@@ -57,15 +61,24 @@ public class JooqAccountDao implements AccountDao {
                 ACCOUNT.CURRENCYCODE);
         select.addFrom(ACCOUNT);
         select.addConditions(ACCOUNT.ACCOUNTID.eq(BigInteger.valueOf(id)));
-        if (log.isDebugEnabled()) {
-            log.debug("Jooq generates sql statement: {}", select.getSQL());
-        }
+        logJooqQuery(select);
         return select.fetchOne(new AccountMapper());
     }
 
     @Override
     public Account save(Account forSave) {
-        throw new NotSupportedException("not implemnted yet");
+        dsl.transaction(configuration -> {
+            DSLContext innerDsl = DSL.using(configuration);
+            InsertQuery<AccountRecord> insertQuery = innerDsl.insertQuery(ACCOUNT);
+            insertQuery.addValue(ACCOUNT.ACCOUNTNUMBER, forSave.getAccountNumber());
+            insertQuery.addValue(ACCOUNT.BALANCE, forSave.getBalance());
+            logJooqQuery(insertQuery);
+            int execute = insertQuery.execute();
+            if (1 != execute) {
+                throw new RuntimeException("Account insertion failed. Rollback transaction");
+            }
+        });
+        return forSave;
     }
 
     @Override
@@ -82,6 +95,12 @@ public class JooqAccountDao implements AccountDao {
             account.setAccountNumber(record.get(ACCOUNT.ACCOUNTNUMBER));
             account.setBalance(record.get(ACCOUNT.BALANCE));
             return account;
+        }
+    }
+
+    private void logJooqQuery(Query query) {
+        if (log.isDebugEnabled()) {
+            log.debug("Jooq generates query: {}", query.getSQL());
         }
     }
 }

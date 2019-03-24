@@ -31,8 +31,8 @@ public class DslContextProvider implements Provider<DSLContext> {
     private Configuration configuration = null;
 
     @Inject
-    public DslContextProvider(final DataSource jdbcSource, final SQLDialect sqlDialect) {
-        this.dataSource = jdbcSource;
+    public DslContextProvider(final DataSource dataSource, final SQLDialect sqlDialect) {
+        this.dataSource = dataSource;
         this.sqlDialect = sqlDialect;
     }
 

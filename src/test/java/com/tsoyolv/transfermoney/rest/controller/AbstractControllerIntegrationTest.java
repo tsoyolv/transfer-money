@@ -1,10 +1,11 @@
 package com.tsoyolv.transfermoney.rest.controller;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.tsoyolv.transfermoney.database.DBMigration;
 import com.tsoyolv.transfermoney.embeddedserver.EmbeddedServer;
-import com.tsoyolv.transfermoney.embeddedserver.impl.JettyEmbeddedServer;
-import com.tsoyolv.transfermoney.rest.controller.jersey.AccountController;
+import com.tsoyolv.transfermoney.guice.modules.MainModule;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -30,7 +31,7 @@ public abstract class AbstractControllerIntegrationTest {
     private static final String ROOT_JSON_EXAMPLES_PATH = "jsonexamples" + File.separator;
     private static final String URI_SCHEME = "http";
 
-    private EmbeddedServer embeddedServer = new JettyEmbeddedServer(AccountController.class.getPackageName(), false);
+    private EmbeddedServer embeddedServer = initEmbeddedServer();
 
     private final String HOST = embeddedServer.getServerHost() + ":" + embeddedServer.getServerPort();
 
@@ -108,5 +109,11 @@ public abstract class AbstractControllerIntegrationTest {
         Scanner scanner = new Scanner(resourceAsStream).useDelimiter("\\A");
         String json = scanner.hasNext() ? scanner.next() : "";
         return mapper.readValue(json, clazz);
+    }
+
+    private EmbeddedServer initEmbeddedServer() {
+        Injector injector = Guice.createInjector(new MainModule());
+        return injector.getInstance(EmbeddedServer.class);
+        //return new JettyEmbeddedServer(AccountController.class.getPackageName(), false);
     }
 }
