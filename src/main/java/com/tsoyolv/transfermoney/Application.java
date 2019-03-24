@@ -1,8 +1,10 @@
 package com.tsoyolv.transfermoney;
 
+import com.google.inject.Guice;
+import com.google.inject.Injector;
 import com.tsoyolv.transfermoney.database.DBMigration;
 import com.tsoyolv.transfermoney.embeddedserver.EmbeddedServer;
-import com.tsoyolv.transfermoney.embeddedserver.impl.spark.SparkEmbeddedServer;
+import com.tsoyolv.transfermoney.guice.modules.MainModule;
 
 import java.sql.SQLException;
 
@@ -22,7 +24,8 @@ public class Application {
             /*String packageForHttpControllers = AccountController.class.getPackageName();
             embeddedServer = new JettyEmbeddedServer(packageForHttpControllers, true);
             embeddedServer.startServer();*/
-            embeddedServer = new SparkEmbeddedServer();
+            Injector injector = Guice.createInjector(new MainModule());
+            embeddedServer = injector.getInstance(EmbeddedServer.class);
             embeddedServer.startServer();
             log.debug("Application successfully started");
         } catch (SQLException e) {

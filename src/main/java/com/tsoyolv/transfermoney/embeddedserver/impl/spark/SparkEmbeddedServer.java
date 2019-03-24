@@ -1,8 +1,9 @@
 package com.tsoyolv.transfermoney.embeddedserver.impl.spark;
 
+import com.google.inject.Inject;
+import com.tsoyolv.transfermoney.LoggerWrapper;
 import com.tsoyolv.transfermoney.embeddedserver.AbstractEmbeddedServer;
 import com.tsoyolv.transfermoney.embeddedserver.impl.spark.requestlog.SparkUtils;
-import com.tsoyolv.transfermoney.LoggerWrapper;
 import com.tsoyolv.transfermoney.rest.RestPaths;
 import com.tsoyolv.transfermoney.rest.controller.spark.AccountController;
 
@@ -20,6 +21,9 @@ public class SparkEmbeddedServer extends AbstractEmbeddedServer {
     private static final String ID_PATH = "/:id";
     public static final String ID = ":id";
 
+    @Inject
+    private AccountController accountController;
+
     /**
      * {@inheritDoc}
      */
@@ -29,9 +33,9 @@ public class SparkEmbeddedServer extends AbstractEmbeddedServer {
         SparkUtils.createServerWithRequestLog(logger);
         port(getServerPort());
         get(RestPaths.REST_ROOT_PATH + "/hello", (req, res) -> "Hello World");
-        get(RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH, AccountController.getAccounts);
-        get(RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH + ID_PATH, AccountController.getAccount);
-        post(RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH, AccountController.createAccount);
+        get(RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH, accountController.getAccounts);
+        get(RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH + ID_PATH, accountController.getAccount);
+        post(RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH, accountController.createAccount);
     }
 
     @Override

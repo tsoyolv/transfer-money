@@ -1,11 +1,10 @@
 package com.tsoyolv.transfermoney.rest.controller.spark;
 
+import com.google.inject.Inject;
 import com.tsoyolv.transfermoney.logic.entity.Account;
 import com.tsoyolv.transfermoney.logic.service.AccountService;
-import com.tsoyolv.transfermoney.logic.service.impl.AccountServiceImpl;
 import com.tsoyolv.transfermoney.rest.webmodel.WebAccount;
 import ma.glasnost.orika.MapperFacade;
-import ma.glasnost.orika.impl.DefaultMapperFactory;
 import spark.Request;
 import spark.Response;
 import spark.Route;
@@ -19,17 +18,19 @@ import static com.tsoyolv.transfermoney.rest.controller.spark.serialization.Seri
 
 public class AccountController {
 
-    private static AccountService accountService = new AccountServiceImpl();
+    @Inject
+    private AccountService accountService;
 
-    private static MapperFacade mapperFacade = new DefaultMapperFactory.Builder().build().getMapperFacade();
+    @Inject
+    private MapperFacade mapperFacade;
 
-    public static Route getAccounts = (Request request, Response response) -> {
+    public Route getAccounts = (Request request, Response response) -> {
         Collection<Account> accounts = accountService.getAccounts();
         List<WebAccount> webAccounts = mapperFacade.mapAsList(accounts, WebAccount.class);
         return serializeObject(webAccounts);
     };
 
-    public static Route getAccount = (Request request, Response response) -> {
+    public Route getAccount = (Request request, Response response) -> {
         response.type("application/json");
         String id = request.params(ID);
         Account account = accountService.getAccount(Long.valueOf(id));
@@ -37,7 +38,7 @@ public class AccountController {
         return serializeObject(webAccount);
     };
 
-    public static Route createAccount = (Request request, Response response) -> {
+    public Route createAccount = (Request request, Response response) -> {
         response.type("application/json");
         String body = request.body();
         WebAccount webAccount = deserializeObject(body, WebAccount.class);

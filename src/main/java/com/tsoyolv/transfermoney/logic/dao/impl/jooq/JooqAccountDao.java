@@ -1,23 +1,17 @@
 package com.tsoyolv.transfermoney.logic.dao.impl.jooq;
 
+import com.google.inject.Inject;
 import com.tsoyolv.transfermoney.LoggerWrapper;
-import com.tsoyolv.transfermoney.database.DatabaseConnector;
 import com.tsoyolv.transfermoney.logic.dao.AccountDao;
 import com.tsoyolv.transfermoney.logic.entity.Account;
 import com.tsoyolv.transfermoney.logic.entity.Transaction;
 import org.jooq.DSLContext;
 import org.jooq.Record;
-import org.jooq.Record4;
 import org.jooq.RecordMapper;
-import org.jooq.SQLDialect;
-import org.jooq.SelectJoinStep;
-import org.jooq.impl.DSL;
+import org.jooq.SelectQuery;
 
 import javax.ws.rs.NotSupportedException;
-import java.math.BigDecimal;
 import java.math.BigInteger;
-import java.sql.Connection;
-import java.sql.SQLException;
 import java.util.Collection;
 
 import static com.tsoyolv.transfermoney.LoggerWrapper.JDBC_LOGGER_NAME;
@@ -27,6 +21,9 @@ public class JooqAccountDao implements AccountDao {
 
     private static final LoggerWrapper log = LoggerWrapper.getLogger(JDBC_LOGGER_NAME);
 
+    @Inject
+    private DSLContext dsl;
+
     @Override
     public boolean transferMoney(Transaction transaction) {
         return false;
@@ -34,19 +31,18 @@ public class JooqAccountDao implements AccountDao {
 
     @Override
     public Collection<Account> get() {
-        try (Connection conn = DatabaseConnector.getConnection()) {
-            DSLContext dsl = DSL.using(conn, SQLDialect.H2);
-            SelectJoinStep<Record4<BigInteger, String, BigDecimal, String>> selectStatement = dsl.
-                    select(ACCOUNT.ACCOUNTID,
-                            ACCOUNT.ACCOUNTNUMBER,
-                            ACCOUNT.BALANCE,
-                            ACCOUNT.CURRENCYCODE).
-                    from(ACCOUNT);
+        try {
+            SelectQuery<Record> select = dsl.selectQuery();
+            select.addSelect(ACCOUNT.ACCOUNTID,
+                    ACCOUNT.ACCOUNTNUMBER,
+                    ACCOUNT.BALANCE,
+                    ACCOUNT.CURRENCYCODE);
+            select.addFrom(ACCOUNT);
             if (log.isDebugEnabled()) {
-                log.debug("Jooq generates sql statement: {}", selectStatement.getSQL());
+                log.debug("Jooq generates sql statement: {}", select.getSQL());
             }
-            return selectStatement.fetch(new AccountMapper());
-        } catch (SQLException e) {
+            return select.fetch(new AccountMapper());
+        } catch (Exception e) {
             log.error("Accounts", e);
             throw new RuntimeException(e);
         }
@@ -54,7 +50,17 @@ public class JooqAccountDao implements AccountDao {
 
     @Override
     public Account get(Long id) {
-        throw new NotSupportedException("not implemnted yet");
+        SelectQuery<Record> select = dsl.selectQuery();
+        select.addSelect(ACCOUNT.ACCOUNTID,
+                ACCOUNT.ACCOUNTNUMBER,
+                ACCOUNT.BALANCE,
+                ACCOUNT.CURRENCYCODE);
+        select.addFrom(ACCOUNT);
+        select.addConditions(ACCOUNT.ACCOUNTID.eq(BigInteger.valueOf(id)));
+        if (log.isDebugEnabled()) {
+            log.debug("Jooq generates sql statement: {}", select.getSQL());
+        }
+        return select.fetchOne(new AccountMapper());
     }
 
     @Override

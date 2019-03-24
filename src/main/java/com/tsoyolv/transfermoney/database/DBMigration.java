@@ -18,7 +18,7 @@ import static com.tsoyolv.transfermoney.LoggerWrapper.JDBC_LOGGER_NAME;
 
 /**
  * Run sql scripts to create tables.
- * Can be changed to migration framework (liquibase or flyway)
+ * todo change to migration framework (liquibase or flyway)
  */
 public class DBMigration {
 
