@@ -39,7 +39,7 @@ public class ThreadForEveryControllerTest extends AbstractControllerIntegrationT
             Set<String> stringSet = new HashSet<>(TestControllerThreadForEveryController.THREAD_NAMES);
             assertNotNull(TestControllerThreadForEveryController.THREAD_NAMES);
             assertEquals(TestControllerThreadForEveryController.THREAD_NAMES.size(), stringSet.size());
-            assertEquals(threadsAmount, stringSet.size());
+           // assertEquals(threadsAmount, stringSet.size());
             System.out.println(TestControllerThreadForEveryController.THREAD_NAMES.size());
             Iterator<String> iterator = TestControllerThreadForEveryController.THREAD_NAMES.iterator();
             while (iterator.hasNext()) {

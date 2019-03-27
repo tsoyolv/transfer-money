@@ -32,7 +32,6 @@ public class SparkEmbeddedServer extends AbstractEmbeddedServer {
         LoggerWrapper logger = LoggerWrapper.getLogger(REQUESTS_LOGGER_NAME);
         SparkUtils.createServerWithRequestLog(logger);
         port(getServerPort());
-        get(RestPaths.REST_ROOT_PATH + "/hello", (req, res) -> "Hello World");
         get(RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH, accountController.getAccounts);
         get(RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH + ID_PATH, accountController.getAccount);
         post(RestPaths.REST_ROOT_PATH + RestPaths.ACCOUNT_ROOT_PATH, accountController.createAccount);

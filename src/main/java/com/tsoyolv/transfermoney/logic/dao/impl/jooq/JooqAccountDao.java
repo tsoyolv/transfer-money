@@ -73,6 +73,8 @@ public class JooqAccountDao implements AccountDao {
             insertQuery.addValue(ACCOUNT.ACCOUNTNUMBER, forSave.getAccountNumber());
             insertQuery.addValue(ACCOUNT.BALANCE, forSave.getBalance());
             logJooqQuery(insertQuery);
+            // AccountRecord accountRecord = insertQuery.getReturnedRecord(); // doesn't work there is an open jooq issue
+            // https://github.com/jOOQ/jOOQ/issues/3035 INSERT .. RETURNING does not return any value in H2, when no AUTO_INCREMENT column is involved #3035
             int execute = insertQuery.execute();
             if (1 != execute) {
                 throw new RuntimeException("Account insertion failed. Rollback transaction");

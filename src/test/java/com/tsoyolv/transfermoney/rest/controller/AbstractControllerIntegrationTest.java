@@ -5,7 +5,9 @@ import com.google.inject.Guice;
 import com.google.inject.Injector;
 import com.tsoyolv.transfermoney.database.DBMigration;
 import com.tsoyolv.transfermoney.embeddedserver.EmbeddedServer;
+import com.tsoyolv.transfermoney.embeddedserver.impl.JettyEmbeddedServer;
 import com.tsoyolv.transfermoney.guice.modules.MainModule;
+import com.tsoyolv.transfermoney.rest.controller.jersey.AccountController;
 import org.apache.http.HttpResponse;
 import org.apache.http.client.HttpClient;
 import org.apache.http.client.methods.HttpGet;
@@ -111,9 +113,9 @@ public abstract class AbstractControllerIntegrationTest {
         return mapper.readValue(json, clazz);
     }
 
-    private EmbeddedServer initEmbeddedServer() {
-        Injector injector = Guice.createInjector(new MainModule());
-        return injector.getInstance(EmbeddedServer.class);
-        //return new JettyEmbeddedServer(AccountController.class.getPackageName(), false);
+    protected EmbeddedServer initEmbeddedServer() {
+        /*Injector injector = Guice.createInjector(new MainModule());
+        return injector.getInstance(EmbeddedServer.class);*/
+        return new JettyEmbeddedServer(AccountController.class.getPackageName(), false);
     }
 }
